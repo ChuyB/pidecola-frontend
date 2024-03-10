@@ -55,3 +55,24 @@ export async function requestRide(_currentState: unknown, formData: FormData) {
 
   return { status: res.status };
 }
+
+export async function getUserRide() {
+  if (isAccessTokenExpired()) await refreshTokens();
+
+  const { access } = getAuthCookies();
+  if (!access) return;
+
+  const { user_id } = jwtDecode(access) as { user_id: string };
+
+  const res = await fetch(`${SERVER}/ride_requests/${user_id}/get_by_user_id/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access}`,
+    },
+  });
+  const result = await res.json();
+  console.log(result)
+
+  return result;
+}
