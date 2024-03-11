@@ -1,42 +1,28 @@
-"use client";
-
-import { Skeleton } from "@nextui-org/react";
 import Image from "next/image";
 import RequestRideForm from "@/components/RequestRideForm";
 import carpool from "@/assets/carpool_2.svg";
 import { getUserRide } from "@/lib/actions/rides";
 import UserCurrentRide from "@/components/UserCurrentRide";
-import { useEffect, useState } from "react";
 
 interface Ride {
+  id: number;
   origin: string;
   destination: string;
+  status: string;
   ride: null;
 }
 
-const ActiveRides = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [ride, setRide] = useState<Ride | null>(null);
-  useEffect(() => {
-    const fetchRide = async () => {
-      const fetchedRide = await getUserRide();
-
-      setIsLoading(true)
-      setRide(fetchedRide?.[0]);
-      setIsLoading(false)
-    };
-
-    fetchRide();
-  }, []);
-
+const ActiveRideSection = async () => {
+  const ride = await getUserRide() as Ride[];
   return (
-    <Skeleton isLoaded={!isLoading} className="rounded-lg w-full max-w-lg overflow-visible">
-      <section className="mt-10 w-full max-w-lg px-6 text-center">
-        {ride ? (
+    <section className="mt-10 w-full max-w-lg px-6 text-center">
+        {ride.length !== 0 ? (
           <UserCurrentRide
-            origin={ride.origin}
-            destination={ride.destination}
-            ride={ride.ride}
+            id={ride[0]?.id}
+            origin={ride[0]?.origin}
+            destination={ride[0]?.destination}
+            ride={ride[0]?.ride}
+            status={ride[0]?.status}
           />
         ) : (
           <div className="flex flex-col items-center justify-center gap-9 animate-fade-up">
@@ -50,9 +36,8 @@ const ActiveRides = () => {
             <RequestRideForm />
           </div>
         )}
-      </section>
-    </Skeleton>
+    </section>
   );
 };
 
-export default ActiveRides;
+export default ActiveRideSection;
