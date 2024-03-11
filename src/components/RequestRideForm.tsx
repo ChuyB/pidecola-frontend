@@ -1,17 +1,17 @@
 "use client";
 
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
   Autocomplete,
   AutocompleteItem,
   Button,
   RadioGroup,
   Radio,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
   useDisclosure,
 } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody } from "@nextui-org/modal";
 import { getRoutes, requestRide } from "@/lib/actions/rides";
 import { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
@@ -47,10 +47,10 @@ const RequestRideForm = () => {
       <Button color="primary" onPress={onOpen}>
         ¡Pide tu cola!
       </Button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="center">
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           <>
-            <ModalHeader className="dark:text-slate-300 text-2xl font-bold text-center">
+            <ModalHeader className="dark:text-slate-300 text-2xl font-bold">
               ¡Pide tu cola!
             </ModalHeader>
 
@@ -63,6 +63,7 @@ const RequestRideForm = () => {
                 ""
               )}
               <form
+                id="request_ride"
                 className="flex flex-col gap-8 items-center"
                 action={submitAction}
               >
@@ -90,7 +91,7 @@ const RequestRideForm = () => {
                     </AutocompleteItem>
                   ))}
                 </Autocomplete>
-                <RegisterButton />
+                <RegisterButton onClose={onClose} />
               </form>
             </ModalBody>
           </>
@@ -100,26 +101,42 @@ const RequestRideForm = () => {
   );
 };
 
-const RegisterButton = () => {
+const RegisterButton = ({ onClose }: { onClose: () => void }) => {
   const { pending } = useFormStatus();
-  return pending ? (
-    <Button
-      isLoading
-      className="w-min mt-10 mb-4"
-      color="default"
-      variant="shadow"
-    >
-      Crear cuenta
-    </Button>
-  ) : (
-    <Button
-      type="submit"
-      className="w-min mt-10 mb-4"
-      color="primary"
-      variant="shadow"
-    >
-      Crear cuenta
-    </Button>
+  return (
+    <Popover backdrop="opaque">
+      <PopoverTrigger>
+        <Button
+          isLoading={pending}
+          className="w-min mt-10 mb-4"
+          color="primary"
+          variant="shadow"
+        >
+          Pedir cola
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="flex flex-col gap-8 justify-center items-center w-min p-4">
+        <h1 className="text-bold text-md">¿Estás seguro que deseas pedir esta cola?</h1>
+        <div className="flex flex-row gap-8 w-full justify-between">
+          <Button
+            isLoading={pending}
+            color="primary"
+            type="submit"
+            form="request_ride"
+            size="sm"
+          >
+            Sí
+          </Button>
+          <Button
+            color="danger"
+            onClick={onClose}
+            size="sm"
+          >
+            No
+          </Button>
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 };
 
