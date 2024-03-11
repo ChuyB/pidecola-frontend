@@ -1,9 +1,13 @@
-import ActiveRides from "@/sections/ActiveRides";
+import ActiveRideSection from "@/sections/ActiveRideSection";
+import { Skeleton } from "@nextui-org/react";
+import { Suspense } from "react";
 
 export default function RequestRide() {
   return (
-    <div className="relative w-full flex flex-grow items-center justify-center">
-      <ActiveRides />
+    <div className="w-full flex flex-grow items-center justify-center">
+      <Suspense fallback={<Skeleton className="w-full rounded" />}>
+        <ActiveRideSection />
+      </Suspense>
     </div>
   )
 }
