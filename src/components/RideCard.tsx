@@ -1,4 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
+import Swal from "sweetalert2";
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+} from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 
 interface RideCardProps {
@@ -7,7 +15,7 @@ interface RideCardProps {
   from: string;
   to: string;
   time: string;
-  onButtonClick?: () => void; // Agregar un callback opcional para el evento de clic del botón
+  onClick?: () => void;
 }
 
 const RideCard: React.FC<RideCardProps> = ({
@@ -16,65 +24,95 @@ const RideCard: React.FC<RideCardProps> = ({
   from,
   to,
   time,
-  onButtonClick = () => alert("Hello"), // Asignar una función predeterminada si no se proporciona ninguna
+  onClick,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const handleClick = () => {
-    onButtonClick();
+    Swal.fire({
+      title: "Estas Seguro?",
+      text: "Texto",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, lo estoy",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    });
   };
 
   return (
-    <div className="bg-gradient-to-r from-slate-200 to-white font-semibold border-solid border-2 border-slate-100 rounded-lg  p-4 flex flex-col sm:flex-row items-center sm:justify-between space-x-0 sm:space-x-4 shadow-lg">
-      <div className="flex items-center mb-4 sm:mb-0 w-8/12">
-        {/* Image Profile */}
-        <img
-          className="w-24 h-24 rounded-full"
-          src={profilePhoto}
-          alt="Profile"
-        />
-        {/* Data names, ride */}
-        <div className="ml-4 space-y-2">
-          <h1 className="text-xl font-bold">{name}</h1>
-          <div className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-6 gap-1 ">
-            <div className="rounded-lg border-black">
-              <p className="text-sm text-gray-500">📍 Desde:</p>
-              <p className="text-sm text-gray-500">{from}</p>
-            </div>
-            <hr className="sm:hidden" />
-            <div className=" rounded-lg">
-              <p className="text-sm text-gray-500">🏳️ Hasta:</p>
-              <p className="text-sm text-gray-500"> {to}</p>
+    <div  className="  bg-gradient-to-r from-slate-300 to-whitefont-semibold border-solid border-2 rounded-lg shadow-lg px-1">
+      <p className="text-l font-bold rounded-sm p-1 text-gray-600">{name}</p>
+      <div className="bg-white flex flex-col sm:flex-row sm:items-center min-w-36 font-semibold border-solid border-2 border-slate-100 rounded-lg p-4 shadow-lg">
+        {/* Imagen y datos */}
+
+        <div className="flex justify-center items-center mb-2">
+          <div className="flex flex-col justify-start items-center sm:items-start">
+            {/* Image Profile */}
+            <img
+              className=" w-14 h-14 rounded-full"
+              src={profilePhoto}
+              alt="Profile"
+            />
+          </div>
+
+          {/* Data names, ride */}
+          <div className="ml-4 space-y-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-6 gap-1">
+              <div className="rounded-lg border-black">
+                <p className="text-tiny text-gray-500">📍 Desde:</p>
+                <p className="text-tiny text-gray-500">{from}</p>
+              </div>
               <hr className="sm:hidden" />
+              <div className="rounded-lg">
+                <p className="text-tiny text-gray-500">🏳️ Hasta:</p>
+                <p className="text-tiny text-gray-500"> {to}</p>
+                <hr className="sm:hidden" />
+              </div>
+              <p className=" text-tiny text-gray-500 sm:col-span-2">
+                ⌚ Hora: {time}
+              </p>
             </div>
-            <p className="text-sm text-gray-500 sm:col-span-2">
-              ⌚ Hora: {time}
-            </p>
           </div>
         </div>
-      </div>
-
-      <div className="sm:ml-auto  sm:w-auto flex justify-end w-8/12">
-        <Button
+        {/* Boton */}
+        <div className=" w-full sm:ml-auto sm:w-auto flex justify-center ">
+          <Button
+            size="sm"
+            className="bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 font-semibold text-white w-full"
+            onClick={handleClick}
+          >
+            Dar Cola 🚖
+          </Button>
+        </div>
+        <Modal
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          title="Mi ventana modal"
           size="sm"
-          className="bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 font-semibold text-white w-full"
-          onClick={handleClick}
+          placement="center"
+          closeButton
         >
-          Dar Cola 🚖
-        </Button>
+          <ModalContent>
+            <ModalHeader>Titulo</ModalHeader>
+            <ModalBody>
+              <p>Texto</p>
+            </ModalBody>
+            <ModalFooter className="text-sm">
+              <Button className="bg-green-500">Boton</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </div>
     </div>
   );
 };
 
 export default RideCard;
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 24 24"
-  fill="currentColor"
-  className="w-6 h-6"
->
-  <path
-    fillRule="evenodd"
-    d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-    clipRule="evenodd"
-  />
-</svg>;

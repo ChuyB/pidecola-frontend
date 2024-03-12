@@ -1,18 +1,22 @@
 "use client";
 import { useState } from "react";
+import { Button } from "@nextui-org/react";
+
 import RideCard from "./RideCard";
 
 export const RidesList = () => {
   const url = "https://api.multiavatar.com/stefan.svg";
   const [rides, setRides] = useState([
     {
+      id: 1,
       profilePhoto: url,
-      name: "Pedrito",
+      name: "Felix La Perra",
       from: "Caracas",
       to: "Baruta",
       time: "8:00am",
     },
     {
+      id: 2,
       profilePhoto: url,
       name: "María",
       from: "Los Teques",
@@ -20,6 +24,7 @@ export const RidesList = () => {
       time: "9:30am",
     },
     {
+      id: 3,
       profilePhoto: url,
       name: "Juan",
       from: "La Guaira",
@@ -27,6 +32,7 @@ export const RidesList = () => {
       time: "10:45am",
     },
     {
+      id: 4,
       profilePhoto: url,
       name: "Ana",
       from: "Petare",
@@ -35,35 +41,13 @@ export const RidesList = () => {
     },
   ]);
 
-  const [activateModal, setActivateModal] = useState(false);
-
-  const showModal = () => {
-    setActivateModal(true);
-  };
-
-  const hiddeModal = () => {
-    setActivateModal(false);
-  };
-
   return (
     <div>
-      <div className="container p-2 m-auto transition-all  space-y-3">
+      <div className=" w-4/5 min-w-7 p-5 m-auto transition-all  space-y-3">
         {rides.map((elem) => {
-          return <RideCard onButtonClick={showModal} {...elem} />;
+          return <RideCard key={elem.id} {...elem} />;
         })}
       </div>
-
-      {activateModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-md">
-          <div className="bg-white border-solid border-2 border-black rounded-md p-2 min-h-96">
-            <h2>Texto de prueba</h2>
-            <button className="bg-red-500 p-1 " onClick={hiddeModal}>Cerrar</button>
-
-
-
-          </div>
-        </div>
-      )}
     </div>
   );
 };
