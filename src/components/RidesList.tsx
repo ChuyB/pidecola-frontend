@@ -10,7 +10,7 @@ export const RidesList = () => {
     {
       id: 1,
       profilePhoto: url,
-      name: "Felix La Perra",
+      name: "Felix",
       from: "Caracas",
       to: "Baruta",
       time: "8:00am",
