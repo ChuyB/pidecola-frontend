@@ -9,6 +9,7 @@ import {
   ArrowLeftStartOnRectangleIcon,
   ArrowRightEndOnRectangleIcon,
   UserPlusIcon,
+  TruckIcon
 } from "@heroicons/react/16/solid";
 import {
   Dropdown,
@@ -63,6 +64,15 @@ const UserActions = () => {
 
         {userData ? (
           <DropdownMenu aria-label="User Actions" color="warning">
+            <DropdownItem
+              key="vehiculos"
+              startContent={<TruckIcon className={iconClasses} />}
+            >
+              <Link href="/vehicles" className="block w-full">
+                Vehículos
+              </Link>
+            </DropdownItem>
+
             <DropdownItem
               key="perfil"
               startContent={<Cog6ToothIcon className={iconClasses} />}
