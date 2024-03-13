@@ -78,3 +78,25 @@ export async function getUserEmail() {
   const result = await res.json();
   return { email: result.email, name: `${result.first_name} ${result.last_name}` };
 }
+
+export async function getUserVehicles() {
+  const cookies = getAuthCookies();
+  if (!cookies) return;
+
+  if (isAccessTokenExpired()) await refreshTokens();
+  const { refresh, access } = getAuthCookies();
+  if (!refresh || !access) return;
+
+  const { user_id } = jwtDecode(access) as { user_id: string };
+  const res = await fetch(`${SERVER}/accounts/${user_id}/vehicles`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access}`,
+    },
+  });
+
+  if (res.status === 401) return;
+  const result = await res.json();
+  return { response: res.status, vehicles: result };
+}
