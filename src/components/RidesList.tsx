@@ -41,7 +41,7 @@ export const RidesList = () => {
 
   return (
     <div>
-      <div className=" w-4/5 min-w-7 p-5 m-auto transition-all  space-y-3">
+      <div className=" container mx-auto">
         {rides.map((elem) => {
           return <RideCard key={elem.id} {...elem} />;
         })}
