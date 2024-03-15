@@ -73,7 +73,7 @@ const RequestRideForm = () => {
       <Button color="primary" onPress={onOpen}>
         ¡Pide tu cola!
       </Button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
         <ModalContent>
           <div
             className={
@@ -133,9 +133,8 @@ const RequestRideForm = () => {
             </ModalBody>
           </div>
           <div
-            className={`${
-              showConfirmation ? "visible animate-fade-up" : "hidden"
-            } absolute inset-0 m-auto h-min`}
+            className={`${showConfirmation ? "visible animate-fade-up" : "hidden"
+              } absolute inset-0 m-auto h-min`}
           >
             <ModalHeader>¿Quieres solicitar esta cola?</ModalHeader>
             <ModalBody>Revisa bien antes de enviar la solicitud</ModalBody>
