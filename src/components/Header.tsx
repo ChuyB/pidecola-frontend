@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.webp";
 import { useEffect, useState } from "react";
 import UserActions from "./UserActions";
 
@@ -32,7 +32,14 @@ const Header = () => {
         href={"/"}
         className="ml-8 sm:absolute w-fit right-0 left-0 sm:mx-auto text-blue-600 transition"
       >
-        <Image src={logo} alt="Logo del PideCola" height={40} width={40} />
+        <Image
+          src={logo}
+          alt="Logo del PideCola"
+          height={40}
+          width={40}
+          className="w-auto"
+          priority={true}
+        />
       </Link>
 
       <UserActions />
