@@ -1,7 +1,5 @@
 "use client";
 import { useState } from "react";
-import { Button } from "@nextui-org/react";
-
 import RideCard from "./RideCard";
 
 export const RidesList = () => {
