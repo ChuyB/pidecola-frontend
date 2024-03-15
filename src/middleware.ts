@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { checkSession } from "./lib/services/checkSession";
+import { getUserRole } from "./lib/services/roles";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const refreshToken = request.cookies.get("refresh_token")?.value;
+  const accessToken = request.cookies.get("access_token")?.value;
+
+  if (!refreshToken || !accessToken)
+    return NextResponse.redirect(new URL("/login", request.url));
 
   // Si un usuario tiene una sesión válida, no tiene que entrar en login o register
   if (
@@ -25,4 +30,11 @@ export async function middleware(request: NextRequest) {
     if (!isValidSession)
       return NextResponse.redirect(new URL("/login", request.url));
   }
+
+  // Ejemplo de ruta protegida
+  // if (pathname.startsWith("/forbidden-route")) {
+  //   const userRole = await getUserRole(accessToken);
+  //   if (userRole !== "admin")
+  //     return NextResponse.redirect(new URL("/request-ride", request.url));
+  // }
 }
