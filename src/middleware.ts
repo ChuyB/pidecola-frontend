@@ -8,9 +8,6 @@ export async function middleware(request: NextRequest) {
   const refreshToken = request.cookies.get("refresh_token")?.value;
   const accessToken = request.cookies.get("access_token")?.value;
 
-  if (!refreshToken || !accessToken)
-    return NextResponse.redirect(new URL("/login", request.url));
-
   // Si un usuario tiene una sesión válida, no tiene que entrar en login o register
   if (
     pathname === "/" ||
