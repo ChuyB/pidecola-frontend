@@ -6,6 +6,7 @@ import {
   Divider,
 } from "@nextui-org/react";
 import CancelRideButton from "./CancelRideButton";
+import RideStatus from "./RideStatus";
 
 interface UserCurrentRideProps {
   userId: number;
@@ -15,7 +16,7 @@ interface UserCurrentRideProps {
   ride: null;
 }
 
-const UserCurrentRide = ({
+const UserCurrentRideCard = ({
   userId,
   to,
   from,
@@ -37,33 +38,11 @@ const UserCurrentRide = ({
         </p>
       </CardBody>
       <CardFooter className="flex flex-row justify-between">
-        {ride ? ride : <Status status={status} />}
+        {ride ? ride : <RideStatus status={status} />}
         <CancelRideButton id={userId} />
       </CardFooter>
     </Card>
   );
 };
 
-const Status = ({ status }: { status: string }) => {
-  let color = "";
-  switch (status) {
-    case "pendiente":
-      color = "text-warning";
-      break;
-    case "iniciado":
-      color = "text-green-700";
-      break;
-    case "terminado":
-      color = "text-blue-700";
-      break;
-    case "cancelado":
-      color = "text-danger";
-      break;
-    default:
-      color = "text-gray-700";
-      break;
-  }
-  return <p className={`uppercase font-medium ${color}`}>{status}</p>;
-};
-
-export default UserCurrentRide;
+export default UserCurrentRideCard;

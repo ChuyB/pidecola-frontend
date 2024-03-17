@@ -2,7 +2,7 @@ import Image from "next/image";
 import RequestRideForm from "@/components/RequestRideForm";
 import carpool from "@/assets/carpool_2.svg";
 import { getUserRide } from "@/lib/actions/rides";
-import UserCurrentRide from "@/components/UserCurrentRide";
+import UserCurrentRideCard from "@/components/UserCurrentRideCard";
 
 interface Ride {
   id: number;
@@ -17,7 +17,7 @@ const ActiveRideSection = async () => {
   return (
     <section className="mt-10 w-full max-w-lg px-6 text-center">
         {ride.length !== 0 ? (
-          <UserCurrentRide
+          <UserCurrentRideCard
             userId={ride[0]?.id}
             from={ride[0]?.origin}
             to={ride[0]?.destination}
