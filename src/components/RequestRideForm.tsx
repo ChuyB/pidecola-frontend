@@ -66,7 +66,7 @@ const RequestRideForm = () => {
     if (formResponse?.status) setErrorNumber(formResponse.status);
 
     onClose();
-  }, [formResponse]);
+  }, [formResponse, onClose]);
 
   return (
     <div>
