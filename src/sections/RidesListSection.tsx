@@ -3,7 +3,6 @@ import { getAllRides } from "@/lib/actions/rides";
 
 export const RidesListSection = async () => {
   const rides = await getAllRides();
-  console.log(rides);
 
   return (
     <section className="mt-8 w-full max-w-lg md:max-w-3xl lg:max-w-4xl p-6">
