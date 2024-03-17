@@ -1,9 +1,9 @@
-import { RidesList } from "@/components/RidesList";
+import { RidesListSection } from "@/sections/RidesListSection";
 
 export default function OffearSeats() {
   return (
-    <div>
-      <RidesList />
+    <div className="flex flex-col justify-center items-center">
+      <RidesListSection />
     </div>
   );
 }

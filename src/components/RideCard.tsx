@@ -8,9 +8,10 @@ import {
   Divider,
   CardFooter,
 } from "@nextui-org/react";
+import { PlusCircleIcon } from "@heroicons/react/16/solid";
 
 interface RideCardProps {
-  profilePhoto: string;
+  // profilePhoto: string;
   name: string;
   from: string;
   to: string;
@@ -19,28 +20,26 @@ interface RideCardProps {
 }
 
 const RideCard: React.FC<RideCardProps> = ({
-  profilePhoto,
+  // profilePhoto,
   name,
   from,
   to,
   time,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const handleClick = () => {
-    alert("Falta implementar modal");
-  };
-
   return (
-    <Card shadow="lg" className="my-2 shadow-lg">
+    <Card>
       <CardHeader className="-mb-1 bg-gradient-to-tr from-slate-200 via-slate-50  to-white py-1 px-2 shadow-md">
+        {/*
+          -- TODO: Profile image fetching
         <Avatar size="md" src={profilePhoto} alt="Profile" />
-        <p className="mx-4 text-l sm:text-xl font-bold text-slate-600">
+        */}
+        <h1 className="mx-4 text-l sm:text-xl font-bold text-slate-600">
           {name}
-        </p>
+        </h1>
       </CardHeader>
       <Divider />
-      <CardBody className=" p-4 border-solid border-black shadow-md rounded-md">
-        <div className="flex flex-col sm:justify-between sm:flex-row sm:items-center">
+      <CardBody>
+        <div className="flex flex-row justify-between items-center">
           <div className="flex  gap-3 text-sm sm:text-base self-start">
             <div>
               <p>Desde</p>
@@ -52,10 +51,9 @@ const RideCard: React.FC<RideCardProps> = ({
             </div>
           </div>
           <Button
-            onClick={handleClick}
+            startContent={<PlusCircleIcon className="h-1/2" />}
             color="primary"
             size="sm"
-            className="w-full font-bold sm:w-fit mt-2 sm:mt-0"
           >
             Dar Cola
           </Button>

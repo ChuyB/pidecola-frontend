@@ -4,16 +4,8 @@ import carpool from "@/assets/carpool_2.svg";
 import { getUserRide } from "@/lib/actions/rides";
 import UserCurrentRideCard from "@/components/UserCurrentRideCard";
 
-interface Ride {
-  id: number;
-  origin: string;
-  destination: string;
-  status: string;
-  ride: null;
-}
-
 const ActiveRideSection = async () => {
-  const ride = await getUserRide() as Ride[];
+  const ride = await getUserRide();
   return (
     <section className="mt-10 w-full max-w-lg px-6 text-center">
         {ride.length !== 0 ? (
