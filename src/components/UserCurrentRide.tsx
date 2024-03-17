@@ -8,17 +8,17 @@ import {
 import CancelRideButton from "./CancelRideButton";
 
 interface UserCurrentRideProps {
-  id: number;
-  destination: string;
-  origin: string;
+  userId: number;
+  to: string;
+  from: string;
   status: string;
   ride: null;
 }
 
 const UserCurrentRide = ({
-  id,
-  destination,
-  origin,
+  userId,
+  to,
+  from,
   ride,
   status,
 }: UserCurrentRideProps) => {
@@ -30,15 +30,15 @@ const UserCurrentRide = ({
       <Divider />
       <CardBody className="uppercase font-bold text-sm">
         <p>
-          Desde: <span className="text-blue-700">{origin}</span>
+          Desde: <span className="text-blue-700">{from}</span>
         </p>
         <p>
-          Hasta: <span className="text-blue-700">{destination}</span>
+          Hasta: <span className="text-blue-700">{to}</span>
         </p>
       </CardBody>
       <CardFooter className="flex flex-row justify-between">
         {ride ? ride : <Status status={status} />}
-        <CancelRideButton id={id} />
+        <CancelRideButton id={userId} />
       </CardFooter>
     </Card>
   );

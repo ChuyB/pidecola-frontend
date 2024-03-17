@@ -18,9 +18,9 @@ const ActiveRideSection = async () => {
     <section className="mt-10 w-full max-w-lg px-6 text-center">
         {ride.length !== 0 ? (
           <UserCurrentRide
-            id={ride[0]?.id}
-            origin={ride[0]?.origin}
-            destination={ride[0]?.destination}
+            userId={ride[0]?.id}
+            from={ride[0]?.origin}
+            to={ride[0]?.destination}
             ride={ride[0]?.ride}
             status={ride[0]?.status}
           />
