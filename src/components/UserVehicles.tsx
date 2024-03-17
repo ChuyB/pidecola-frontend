@@ -22,22 +22,26 @@ const iconClasses = "pointer-events-none w-5";
 
 export default function VehiclesTable({ vehicles }: { vehicles: Vehicle[] }) {
   return (
-    <div >
-      {/* <Button color="primary" startContent={<PlusIcon className={iconClasses}/>}>
-        Añadir Vehículo
-      </Button> */}
-      <Table aria-label="Example table with dynamic content">
-        <TableHeader columns={columns}>
-          {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
-        </TableHeader>
-        <TableBody items={vehicles}>
-          {(item) => (
-            <TableRow key={item.id}>
-              {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+    <div className="w-full items-center justify-content ml-5 mr-5">
+      <div className="mt-5">
+        <Button color="primary" startContent={<PlusIcon className={iconClasses}/>}>
+          Añadir Vehículo
+        </Button>
+      </div>
+      <div className="w-full mt-5">  
+        <Table aria-label="Vehicles table">
+          <TableHeader columns={columns}>
+            {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
+          </TableHeader>
+          <TableBody items={vehicles}>
+            {(item) => (
+              <TableRow key={item.id}>
+                {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
