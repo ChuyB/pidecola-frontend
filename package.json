@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.1.1",
-    "@nextui-org/react": "^2.2.9",
+    "@nextui-org/react": "^2.2.10",
     "dayjs": "^1.11.10",
     "framer-motion": "^11.0.5",
     "jsonwebtoken": "^9.0.2",
