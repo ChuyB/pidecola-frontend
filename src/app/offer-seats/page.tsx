@@ -1,9 +1,9 @@
 import { RidesList } from "@/components/RidesList";
 
-export default function Rides() {
+export default function OffearSeats() {
   return (
     <div>
-      <RidesList/>
+      <RidesList />
     </div>
   );
 }
