@@ -24,7 +24,8 @@ export async function middleware(request: NextRequest) {
   if (
     pathname.startsWith("/profile") ||
     pathname.startsWith("/request-ride") ||
-    pathname.startsWith("/offer-seats")
+    pathname.startsWith("/offer-seats") ||
+    pathname.startsWith("/home")
   ) {
     const { isValidSession, response } = await checkSession(refreshToken);
 
