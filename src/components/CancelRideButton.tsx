@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { cancelRide } from "@/lib/actions/rides";
 import { XCircleIcon } from "@heroicons/react/16/solid";
@@ -11,21 +11,23 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
-import { useTransition } from "react";
+import { useState } from "react";
 
 const CancelRideButton = ({ id }: { id: number }) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  const [isPending, startTransition] = useTransition();
+  const [isLoading, setIsLoading] = useState(false);
   const handleCancel = async () => {
-    startTransition(async () => {await cancelRide(id)});
-    onClose();
+    cancelRide(id).then(() => {
+      setIsLoading(false);
+      onClose();
+    });
   };
   return (
     <>
       <Button
         color="danger"
         size="sm"
-        isLoading={isPending}
+        isLoading={isLoading}
         startContent={<XCircleIcon className="h-1/2" />}
         onPress={onOpen}
       >

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import logo from "../assets/logo.webp";
 import { useEffect, useState } from "react";
-import UserActions from "./UserActions";
+import UserInfo from "./UserInfo";
 
 const Header = () => {
   const [isTop, setIsTop] = useState(true);
@@ -42,7 +42,7 @@ const Header = () => {
         />
       </Link>
 
-      <UserActions />
+      <UserInfo />
     </header>
   );
 };

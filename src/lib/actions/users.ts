@@ -58,12 +58,8 @@ export async function registerUser(_currentState: unknown, formData: FormData) {
 }
 
 export async function getUserEmail() {
-  const cookies = getAuthCookies();
-  if (!cookies) return;
-
-  if (isAccessTokenExpired()) await refreshTokens();
-  const { refresh, access } = getAuthCookies();
-  if (!refresh || !access) return;
+  const { access } = getAuthCookies();
+  if (!access) return null;
 
   const { user_id } = jwtDecode(access) as { user_id: string };
   const res = await fetch(`${SERVER}/accounts/${user_id}/`, {
@@ -74,9 +70,12 @@ export async function getUserEmail() {
     },
   });
 
-  if (res.status === 401) return;
+  if (res.status === 401) return null;
   const result = await res.json();
-  return { email: result.email, name: `${result.first_name} ${result.last_name}` };
+  return {
+    email: result.email,
+    name: `${result.first_name} ${result.last_name}`,
+  };
 }
 
 export async function getUserRole() {

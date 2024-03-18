@@ -25,24 +25,21 @@ interface UserData {
   name: string;
 }
 
-const UserActions = () => {
+const UserInfo = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true)
   const pathname = usePathname();
   const isLoginOrRegister = pathname === "/login" || pathname === "/register";
 
-  const iconClasses = "pointer-events-none w-5";
-
   useEffect(() => {
-    const updateUserData = async () => {
-      const userData = (await getUserEmail()) as UserData;
-      setUserData(userData);
-    };
+    getUserEmail()
+      .then((data) => {
+        setUserData(data)
+        setIsLoading(false)
+      })
+  }, [])
 
-    setIsLoading(true);
-    updateUserData();
-    setIsLoading(false);
-  }, []);
+  const iconClasses = "pointer-events-none w-5";
 
   return isLoginOrRegister ? (
     <></>
@@ -113,4 +110,4 @@ const UserActions = () => {
   );
 };
 
-export default UserActions;
+export default UserInfo;
