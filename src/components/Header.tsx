@@ -29,7 +29,7 @@ const Header = () => {
         }`}
     >
       <Link
-        href={"/"}
+        href="/"
         className="ml-8 sm:absolute w-fit right-0 left-0 sm:mx-auto text-blue-600 transition"
       >
         <Image

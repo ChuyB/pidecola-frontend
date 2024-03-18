@@ -8,7 +8,8 @@ export async function middleware(request: NextRequest) {
   const refreshToken = request.cookies.get("refresh_token")?.value;
   const accessToken = request.cookies.get("access_token")?.value;
 
-  // Si un usuario tiene una sesión válida, no tiene que entrar en login o register
+  // Si un usuario tiene una sesión válida, no tiene que entrar
+  // en login, register o index
   if (
     pathname === "/" ||
     pathname.startsWith("/register") ||
@@ -41,3 +42,16 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 }
+
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+  ],
+};

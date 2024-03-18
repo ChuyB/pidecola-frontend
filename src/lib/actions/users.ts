@@ -68,6 +68,7 @@ export async function getUserEmail() {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access}`,
     },
+    cache: "force-cache",
   });
 
   if (res.status === 401) return null;
@@ -89,6 +90,7 @@ export async function getUserRole() {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access}`,
     },
+    cache: "force-cache",
   });
 
   if (res.status === 401) return;
