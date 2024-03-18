@@ -13,7 +13,7 @@ const TextAlternator = () =>{
       setCurrentText((prevText)=>(prevText + 1) % texts.length);
     }, 8000);
     return () => clearInterval(interval);
-  }, []);
+  }, [texts.length]);
 
   return(
     <div className=" bg-yellow-400 rounded-md text-center h-auto shadow-lg shadow-slate-600">

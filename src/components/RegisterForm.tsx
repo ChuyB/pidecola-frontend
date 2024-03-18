@@ -61,7 +61,7 @@ const RegisterForm = () => {
   }, [resMessage]);
 
   // Redirect if login was successful
-  if (resMessage?.status === 201) router.push("/request-ride");
+  if (resMessage?.status === 201) router.push("/home");
 
   const handlePhoneNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
     const inputNumber = e.target.value;

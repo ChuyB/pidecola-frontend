@@ -41,7 +41,7 @@ const LoginForm = () => {
   }, [resMessage]);
 
   // Redirect if login was successful
-  if (resMessage?.status === 200) router.push("/request-ride");
+  if (resMessage?.status === 200) router.push("/home");
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 

@@ -17,7 +17,7 @@ export async function middleware(request: NextRequest) {
     const { isValidSession } = await checkSession(refreshToken);
 
     if (isValidSession)
-      return NextResponse.redirect(new URL("/request-ride", request.url));
+      return NextResponse.redirect(new URL("/home", request.url));
   }
 
   // Si un usuario no tiene una sesión válida tiene que registrarse

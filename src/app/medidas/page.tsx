@@ -9,7 +9,7 @@ export default function MedidasPage(){
         <p className="font-bold text-2xl"> Medidas de Bioseguridad </p>
         <ul className="list-disc">
           {medidasBio.map((medida)=>(
-            <li>{medida}</li>
+            <li key={medida}>{medida}</li>
           ))}
         </ul>
       </div>
@@ -17,7 +17,7 @@ export default function MedidasPage(){
       <p className="font-bold text-2xl"> Medidas para el Usuario</p>
         <ul className="list-disc">
           {medidasUsuario.map((medida)=>(
-            <li>{medida}</li>
+            <li key={medida}>{medida}</li>
           ))}
         </ul>
       </div>
@@ -25,7 +25,7 @@ export default function MedidasPage(){
       <p className="font-bold text-2xl"> Medidas para el Conductor</p>
         <ul className="list-disc">
           {medidasConductor.map((medida)=>(
-            <li>{medida}</li>
+            <li key={medida}>{medida}</li>
           ))}
         </ul>
       </div>

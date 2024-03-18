@@ -31,7 +31,7 @@ const ComentReport = () =>{
           onChange={handleReport} 
           className="rounded-md">
               {denuncias.map((denuncia)=>(
-                <option value={denuncia}>{denuncia}</option>
+                <option key={denuncia} value={denuncia}>{denuncia}</option>
               ))}
           </select>
         </div>
