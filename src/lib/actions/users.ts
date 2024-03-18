@@ -78,3 +78,21 @@ export async function getUserEmail() {
   const result = await res.json();
   return { email: result.email, name: `${result.first_name} ${result.last_name}` };
 }
+
+export async function getUserRole() {
+  const { access } = getAuthCookies();
+  if (!access) return;
+
+  const { user_id } = jwtDecode(access) as { user_id: string };
+  const res = await fetch(`${SERVER}/accounts/${user_id}/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access}`,
+    },
+  });
+
+  if (res.status === 401) return;
+  const result = await res.json();
+  return result.role as string;
+}
