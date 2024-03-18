@@ -4,6 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { getAuthCookies } from "../services/authCookie";
 import { isAccessTokenExpired, refreshTokens } from "./session";
 import { revalidateTag } from "next/cache";
+import { Ride } from "../types/rides.type";
 
 const SERVER = process.env.NEXT_PUBLIC_API_URL;
 
@@ -61,7 +62,7 @@ export async function requestRide(_currentState: unknown, formData: FormData) {
 
 export async function getUserRide() {
   const { access } = getAuthCookies();
-  if (!access) return;
+  if (!access) return [];
 
   const { user_id } = jwtDecode(access) as { user_id: string };
 
@@ -81,7 +82,7 @@ export async function getUserRide() {
   );
   const result = await res.json();
 
-  return result;
+  return result as Ride[];
 }
 
 export async function cancelRide(id: number) {
@@ -99,4 +100,27 @@ export async function cancelRide(id: number) {
   });
 
   revalidateTag("current_ride");
+  revalidateTag("rides_list");
+}
+
+export async function getAllRides() {
+  const { access } = getAuthCookies();
+  if (!access) return [];
+
+  const res = await fetch(`${SERVER}/ride_requests/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access}`,
+    },
+    cache: "no-cache",
+    next: {
+      tags: ["rides_list"],
+    },
+  });
+
+  const result = await res.json();
+
+  if (res.status === 200) return result as Ride[];
+  return null;
 }

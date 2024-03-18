@@ -2,25 +2,17 @@ import Image from "next/image";
 import RequestRideForm from "@/components/RequestRideForm";
 import carpool from "@/assets/carpool_2.svg";
 import { getUserRide } from "@/lib/actions/rides";
-import UserCurrentRide from "@/components/UserCurrentRide";
-
-interface Ride {
-  id: number;
-  origin: string;
-  destination: string;
-  status: string;
-  ride: null;
-}
+import UserCurrentRideCard from "@/components/UserCurrentRideCard";
 
 const ActiveRideSection = async () => {
-  const ride = await getUserRide() as Ride[];
+  const ride = await getUserRide();
   return (
     <section className="mt-10 w-full max-w-lg px-6 text-center">
         {ride.length !== 0 ? (
-          <UserCurrentRide
-            id={ride[0]?.id}
-            origin={ride[0]?.origin}
-            destination={ride[0]?.destination}
+          <UserCurrentRideCard
+            userId={ride[0]?.id}
+            from={ride[0]?.origin}
+            to={ride[0]?.destination}
             ride={ride[0]?.ride}
             status={ride[0]?.status}
           />

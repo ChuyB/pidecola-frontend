@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 const SERVER = process.env.NEXT_PUBLIC_API_URL;
 
 export async function checkSession(refreshToken: string | undefined) {
-  if (!refreshToken) return false;
+  if (!refreshToken) return { isValidSession: false, response: null };
   const res = await fetch(`${SERVER}/auth/refresh/`, {
     method: "POST",
     body: JSON.stringify({ refresh: refreshToken }),
@@ -20,8 +20,8 @@ export async function checkSession(refreshToken: string | undefined) {
     response.cookies.set("access_token", access, {
       maxAge: 1000 * 60 * 60 * 24 * 30,
     });
-    return true;
+    return { isValidSession: true, response };
   }
 
-  return false;
+  return { isValidSession: false, response: null };
 }
