@@ -80,12 +80,8 @@ export async function getUserEmail() {
 }
 
 export async function getUserVehicles() {
-  const cookies = getAuthCookies();
-  if (!cookies) return;
-
-  if (isAccessTokenExpired()) await refreshTokens();
-  const { refresh, access } = getAuthCookies();
-  if (!refresh || !access) return;
+  const {access} = getAuthCookies();
+  if (!access) return null;
 
   const { user_id } = jwtDecode(access) as { user_id: string };
   const res = await fetch(`${SERVER}/accounts/${user_id}/vehicles`, {
@@ -96,7 +92,7 @@ export async function getUserVehicles() {
     },
   });
 
-  if (res.status === 401) return;
+  if (res.status === 401) return null;
   const result = await res.json();
-  return { response: res.status, vehicles: result };
+  return result;
 }
