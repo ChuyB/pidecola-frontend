@@ -61,47 +61,47 @@ const UserInfo = () => {
         {userData ? (
           <DropdownMenu aria-label="User Actions" color="warning">
             <DropdownItem
+              as={Link}
               key="perfil"
               startContent={<Cog6ToothIcon className={iconClasses} />}
+              href="/profile"
             >
-              <Link href="/profile" className="block w-full">
-                Configuración
-              </Link>
+              Configuración
             </DropdownItem>
 
             <DropdownItem
               key="cerrar sesión"
               className="text-danger"
+              as={Link}
+              href="/logout"
               color="danger"
               startContent={
                 <ArrowLeftStartOnRectangleIcon className={iconClasses} />
               }
             >
-              <Link href="/logout" className="block w-full">
-                Cerrar sesión
-              </Link>
+              Cerrar sesión
             </DropdownItem>
           </DropdownMenu>
         ) : (
           <DropdownMenu aria-label="User Actions" color="warning">
             <DropdownItem
               key="iniciar sesión"
+              as={Link}
+              href="/login"
               startContent={
                 <ArrowRightEndOnRectangleIcon className={iconClasses} />
               }
             >
-              <Link href="/login" className="block w-full">
-                Iniciar sesión
-              </Link>
+              Iniciar sesión
             </DropdownItem>
 
             <DropdownItem
               key="registro"
+              as={Link}
+              href="/register"
               startContent={<UserPlusIcon className={iconClasses} />}
             >
-              <Link href="/register" className="block w-full">
-                Registrarte
-              </Link>
+              Registrarte
             </DropdownItem>
           </DropdownMenu>
         )}

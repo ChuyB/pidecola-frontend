@@ -8,13 +8,17 @@ import { getUserRole } from "@/lib/actions/users";
 export default async function Home() {
   const role = await getUserRole();
   return (
-    <div className="h-full min-h-3/4 flex flex-col gap-y-4 md:gap-y-0 justify-center items-center py-10">
-      <h1 className="text-3xl font-bold">¿Qué deseas hacer?</h1>
+    <div className="min-h-3/4 flex flex-col justify-center items-center">
+      <div className="h-full w-min flex flex-col gap-y-8 md:gap-y-12 justify-center items-center py-10">
+        <h1 className="w-full text-3xl font-bold text-left md:text-center">
+          ¿Qué deseas hacer?
+        </h1>
 
-      <section className="h-full flex flex-col gap-10 md:flex-row justify-center items-center">
-        <RideRequestCard />
-        {role === "driver" ? <OfferSeatsCard /> : ""}
-      </section>
+        <section className="h-full flex flex-col gap-10 md:flex-row justify-center items-center">
+          <RideRequestCard />
+          {role === "driver" ? <OfferSeatsCard /> : ""}
+        </section>
+      </div>
     </div>
   );
 }
