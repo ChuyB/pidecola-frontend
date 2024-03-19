@@ -53,4 +53,50 @@ const registerSchema = z
     path: ["confirmPass"],
   });
 
-export { loginSchema, registerSchema };
+const registerVehicleSchema = z
+.object({
+  brand: z
+    .string()
+    .min(1, {
+      message: "La marca debe tener al menos un caracter",
+    })
+    .refine((e) => /^[A-Za-z]+$/.test(e), {
+      message: "La marca del vehículo no debe contener números, si consideras que es un error comunícate con el administrador",
+    }),
+  model: z
+    .string()
+    .min(1, {
+      message: "El modelo debe tener al menos un caracter",
+    })
+    .refine((e) => /^[A-Za-z0-9]+$/.test(e), {
+      message: "El modelo del vehículo no debe contener caracteres especiales, si consideras que es un error comunícate con el administrador",
+    }),
+  seats: z
+    .string()
+    .min(1, {
+      message: "El vehículo debe tener al menos un asiento",
+    })
+    .refine((e) => /^[0-9]+$/.test(e), {
+      message: "El número de asientos solo puede ser un número entero",
+    }),
+  color: z
+    .string()
+    .min(1, {
+      message: "El color debe tener al menos un caracter",
+    })
+    .refine((e) => /^[A-Za-z]+$/.test(e), {
+      message: "El color del vehículo no debe contener números, si consideras que es un error comunícate con el administrador",
+    }),
+  plate: z
+    .string()
+    .min(1, {
+      message: "La placa debe tener al menos un caracter",
+    })
+    .max(7, {
+      message: "La placa no puede tener más de 7 caracteres",
+    })
+    .refine((e) => /^[A-Za-z0-9]+$/.test(e), {
+      message: "La placa del vehículo no debe contener caracteres especiales, si consideras que es un error comunícate con el administrador",
+    }),
+});
+export { loginSchema, registerSchema, registerVehicleSchema };
