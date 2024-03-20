@@ -9,6 +9,7 @@ import {
   ArrowLeftStartOnRectangleIcon,
   ArrowRightEndOnRectangleIcon,
   UserPlusIcon,
+  TruckIcon,
 } from "@heroicons/react/16/solid";
 import {
   Dropdown,
@@ -27,17 +28,16 @@ interface UserData {
 
 const UserInfo = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
   const isLoginOrRegister = pathname === "/login" || pathname === "/register";
 
   useEffect(() => {
-    getUserEmail()
-      .then((data) => {
-        setUserData(data)
-        setIsLoading(false)
-      })
-  }, [])
+    getUserEmail().then((data) => {
+      setUserData(data);
+      setIsLoading(false);
+    });
+  }, []);
 
   const iconClasses = "pointer-events-none w-5";
 
@@ -62,6 +62,15 @@ const UserInfo = () => {
           <DropdownMenu aria-label="User Actions" color="warning">
             <DropdownItem
               as={Link}
+              key="vehiculos"
+              startContent={<TruckIcon className={iconClasses} />}
+            >
+              <Link href="/vehicles" className="block w-full">
+                Vehículos
+              </Link>
+            </DropdownItem>
+
+            <DropdownItem
               key="perfil"
               startContent={<Cog6ToothIcon className={iconClasses} />}
               href="/profile"
