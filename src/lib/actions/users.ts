@@ -96,3 +96,29 @@ export async function getUserVehicles() {
   const result = await res.json();
   return result;
 }
+
+export async function registerVehicleUser(_currentState: unknown, formData: FormData) {
+  const {access} = getAuthCookies();
+  if (!access) return null;
+
+  const { user_id } = jwtDecode(access) as { user_id: string };
+  const req = {
+    brand: formData.get("brand"),
+    model: formData.get("model"),
+    seats: formData.get("seats"),
+    color: formData.get("color"),
+    plate: formData.get("plate"),
+    owner: user_id,
+  };
+  const res = await fetch(`${SERVER}/vehicles/`, {
+    method: "POST",
+    body: JSON.stringify(req),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access}`,
+    },
+  });
+  const result = await res.json();
+  setAuthCookies(res, result);
+  return { status: res.status, message: result.message };
+}

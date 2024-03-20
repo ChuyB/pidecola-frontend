@@ -4,7 +4,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/react";
 import Link from "next/link";
-import { registerUser } from "@/lib/actions/users";
+import { registerVehicleUser } from "@/lib/actions/users";
 import { useFormState, useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
 import { registerVehicleSchema } from "@/lib/validations/userSchema";
@@ -16,7 +16,7 @@ const RegisterVehicleForm = () => {
   const [seats, setSeats] = useState("");
   const [color, setColor] = useState("");
   const [plate, setPlate] = useState("");
-  const [resMessage, dispatch] = useFormState(registerUser, undefined);
+  const [resMessage, dispatch] = useFormState(registerVehicleUser, undefined);
 
   // Handle submit
   const submitAction = async (formData: FormData) => {
