@@ -9,7 +9,7 @@ import {
   ArrowLeftStartOnRectangleIcon,
   ArrowRightEndOnRectangleIcon,
   UserPlusIcon,
-  TruckIcon
+  TruckIcon,
 } from "@heroicons/react/16/solid";
 import {
   Dropdown,
@@ -26,24 +26,20 @@ interface UserData {
   name: string;
 }
 
-const UserActions = () => {
+const UserInfo = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
   const isLoginOrRegister = pathname === "/login" || pathname === "/register";
 
-  const iconClasses = "pointer-events-none w-5";
-
   useEffect(() => {
-    const updateUserData = async () => {
-      const userData = (await getUserEmail()) as UserData;
-      setUserData(userData);
-    };
-
-    setIsLoading(true);
-    updateUserData();
-    setIsLoading(false);
+    getUserEmail().then((data) => {
+      setUserData(data);
+      setIsLoading(false);
+    });
   }, []);
+
+  const iconClasses = "pointer-events-none w-5";
 
   return isLoginOrRegister ? (
     <></>
@@ -66,55 +62,55 @@ const UserActions = () => {
           <DropdownMenu aria-label="User Actions" color="warning">
             <DropdownItem
               key="vehiculos"
+              as={Link}
               startContent={<TruckIcon className={iconClasses} />}
+              href="/vehicles"
             >
-              <Link href="/vehicles" className="block w-full">
-                Vehículos
-              </Link>
+              Vehículos
             </DropdownItem>
 
             <DropdownItem
               key="perfil"
+              as={Link}
               startContent={<Cog6ToothIcon className={iconClasses} />}
+              href="/profile"
             >
-              <Link href="/profile" className="block w-full">
-                Configuración
-              </Link>
+              Configuración
             </DropdownItem>
 
             <DropdownItem
               key="cerrar sesión"
               className="text-danger"
+              as={Link}
+              href="/logout"
               color="danger"
               startContent={
                 <ArrowLeftStartOnRectangleIcon className={iconClasses} />
               }
             >
-              <Link href="/logout" className="block w-full">
-                Cerrar sesión
-              </Link>
+              Cerrar sesión
             </DropdownItem>
           </DropdownMenu>
         ) : (
           <DropdownMenu aria-label="User Actions" color="warning">
             <DropdownItem
               key="iniciar sesión"
+              as={Link}
+              href="/login"
               startContent={
                 <ArrowRightEndOnRectangleIcon className={iconClasses} />
               }
             >
-              <Link href="/login" className="block w-full">
-                Iniciar sesión
-              </Link>
+              Iniciar sesión
             </DropdownItem>
 
             <DropdownItem
               key="registro"
+              as={Link}
+              href="/register"
               startContent={<UserPlusIcon className={iconClasses} />}
             >
-              <Link href="/register" className="block w-full">
-                Registrarte
-              </Link>
+              Registrarte
             </DropdownItem>
           </DropdownMenu>
         )}
@@ -123,4 +119,4 @@ const UserActions = () => {
   );
 };
 
-export default UserActions;
+export default UserInfo;

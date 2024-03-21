@@ -53,7 +53,7 @@ const LoginForm = () => {
 
       {resMessage?.status === 401 ? (
         <p className="text-danger text-center mb-6">
-          El usuario o la contraseña no son correctas
+          El usuario o la contraseña no son correctos
         </p>
       ) : (
         ""

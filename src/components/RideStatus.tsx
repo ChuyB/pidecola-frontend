@@ -1,17 +1,20 @@
 import { Chip } from "@nextui-org/chip";
 
-type Colors = "default" | "warning" | "primary" | "success" | "danger";
+type Colors = "default" | "primary" | "secondary" | "warning" | "success" | "danger";
 
 const RideStatus = ({ status }: { status: string }) => {
   let color: Colors = "default";
   switch (status) {
+    case "aceptado":
+      color = "secondary";
+      break;
     case "pendiente":
       color = "warning";
       break;
     case "iniciado":
       color = "primary";
       break;
-    case "terminado":
+    case "finalizado":
       color = "success";
       break;
     case "cancelado":

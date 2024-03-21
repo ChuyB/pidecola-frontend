@@ -2,7 +2,7 @@
 
 import { setAuthCookies, getAuthCookies } from "../services/authCookie";
 import { jwtDecode } from "jwt-decode";
-import { isAccessTokenExpired, refreshTokens } from "./session";
+import { Vehicle } from "../types/vehicle.type";
 
 const SERVER = process.env.NEXT_PUBLIC_API_URL;
 
@@ -58,12 +58,8 @@ export async function registerUser(_currentState: unknown, formData: FormData) {
 }
 
 export async function getUserEmail() {
-  const cookies = getAuthCookies();
-  if (!cookies) return;
-
-  if (isAccessTokenExpired()) await refreshTokens();
-  const { refresh, access } = getAuthCookies();
-  if (!refresh || !access) return;
+  const { access } = getAuthCookies();
+  if (!access) return null;
 
   const { user_id } = jwtDecode(access) as { user_id: string };
   const res = await fetch(`${SERVER}/accounts/${user_id}/`, {
@@ -72,11 +68,15 @@ export async function getUserEmail() {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access}`,
     },
+    cache: "force-cache",
   });
 
-  if (res.status === 401) return;
+  if (res.status === 401) return null;
   const result = await res.json();
-  return { email: result.email, name: `${result.first_name} ${result.last_name}` };
+  return {
+    email: result.email,
+    name: `${result.first_name} ${result.last_name}`,
+  };
 }
 
 export async function getUserRole() {
@@ -90,15 +90,16 @@ export async function getUserRole() {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access}`,
     },
+    cache: "force-cache",
   });
-  
+
   if (res.status === 401) return;
   const result = await res.json();
   return result.role as string;
 }
 
 export async function getUserVehicles() {
-  const {access} = getAuthCookies();
+  const { access } = getAuthCookies();
   if (!access) return null;
 
   const { user_id } = jwtDecode(access) as { user_id: string };
@@ -107,15 +108,19 @@ export async function getUserVehicles() {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access}`,
-    }
+      cache: "force-cache",
+    },
   });
   if (res.status === 401) return null;
   const result = await res.json();
-  return result;
+  return result as Vehicle[];
 }
 
-export async function registerVehicleUser(_currentState: unknown, formData: FormData) {
-  const {access} = getAuthCookies();
+export async function registerVehicleUser(
+  _currentState: unknown,
+  formData: FormData,
+) {
+  const { access } = getAuthCookies();
   if (!access) return null;
 
   const { user_id } = jwtDecode(access) as { user_id: string };

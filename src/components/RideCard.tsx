@@ -1,62 +1,61 @@
-import React, { useState } from "react";
 import {
   Button,
-  Avatar,
   Card,
   CardHeader,
   CardBody,
   Divider,
-  CardFooter,
+  Tooltip,
 } from "@nextui-org/react";
-import { PlusCircleIcon } from "@heroicons/react/16/solid";
+import { UserPlusIcon } from "@heroicons/react/16/solid";
 
 interface RideCardProps {
   // profilePhoto: string;
+  id: number;
   name: string;
   from: string;
   to: string;
   time: string;
-  onClick?: () => void;
+  onSelect: (id: number) => void;
 }
 
 const RideCard: React.FC<RideCardProps> = ({
-  // profilePhoto,
+  id,
   name,
   from,
   to,
-  time,
+  onSelect,
 }) => {
   return (
     <Card>
-      <CardHeader className="-mb-1 bg-gradient-to-tr from-slate-200 via-slate-50  to-white py-1 px-2 shadow-md">
+      <CardHeader>
         {/*
           -- TODO: Profile image fetching
         <Avatar size="md" src={profilePhoto} alt="Profile" />
         */}
-        <h1 className="mx-4 text-l sm:text-xl font-bold text-slate-600">
-          {name}
-        </h1>
+        <h1 className="text-lg sm:text-xl font-bold">{name}</h1>
       </CardHeader>
       <Divider />
       <CardBody>
         <div className="flex flex-row justify-between items-center">
-          <div className="flex  gap-3 text-sm sm:text-base self-start">
-            <div>
-              <p>Desde</p>
-              <p className="text-blue-500 font-semibold">{from}</p>
-            </div>
-            <div>
-              <p>Hasta</p>
-              <p className="text-green-600 font-semibold">{to}</p>
-            </div>
-          </div>
-          <Button
-            startContent={<PlusCircleIcon className="h-1/2" />}
-            color="primary"
-            size="sm"
-          >
-            Dar Cola
-          </Button>
+          <section className="uppercase font-bold text-sm">
+            <p>
+              Desde: <span className="text-blue-700">{from}</span>
+            </p>
+            <p>
+              Hasta: <span className="text-blue-700">{to}</span>
+            </p>
+          </section>
+          <Tooltip content="Añadir pasajero" showArrow>
+            <Button
+              isIconOnly
+              color="primary"
+              variant="ghost"
+              size="sm"
+              onClick={() => onSelect(id)}
+            >
+              <UserPlusIcon className="h-1/2" />
+            </Button>
+          </Tooltip>
         </div>
       </CardBody>
     </Card>
