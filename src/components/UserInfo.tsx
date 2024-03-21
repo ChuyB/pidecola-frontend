@@ -61,17 +61,17 @@ const UserInfo = () => {
         {userData ? (
           <DropdownMenu aria-label="User Actions" color="warning">
             <DropdownItem
-              as={Link}
               key="vehiculos"
+              as={Link}
               startContent={<TruckIcon className={iconClasses} />}
+              href="/vehicles"
             >
-              <Link href="/vehicles" className="block w-full">
-                Vehículos
-              </Link>
+              Vehículos
             </DropdownItem>
 
             <DropdownItem
               key="perfil"
+              as={Link}
               startContent={<Cog6ToothIcon className={iconClasses} />}
               href="/profile"
             >

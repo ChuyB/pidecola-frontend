@@ -2,7 +2,7 @@
 
 import { setAuthCookies, getAuthCookies } from "../services/authCookie";
 import { jwtDecode } from "jwt-decode";
-import { isAccessTokenExpired, refreshTokens } from "./session";
+import { Vehicle } from "../types/vehicle.type";
 
 const SERVER = process.env.NEXT_PUBLIC_API_URL;
 
@@ -92,14 +92,14 @@ export async function getUserRole() {
     },
     cache: "force-cache",
   });
-  
+
   if (res.status === 401) return;
   const result = await res.json();
   return result.role as string;
 }
 
 export async function getUserVehicles() {
-  const {access} = getAuthCookies();
+  const { access } = getAuthCookies();
   if (!access) return null;
 
   const { user_id } = jwtDecode(access) as { user_id: string };
@@ -108,14 +108,19 @@ export async function getUserVehicles() {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access}`,
-  }
+      cache: "force-cache",
+    },
+  });
   if (res.status === 401) return null;
   const result = await res.json();
-  return result;
+  return result as Vehicle[];
 }
 
-export async function registerVehicleUser(_currentState: unknown, formData: FormData) {
-  const {access} = getAuthCookies();
+export async function registerVehicleUser(
+  _currentState: unknown,
+  formData: FormData,
+) {
+  const { access } = getAuthCookies();
   if (!access) return null;
 
   const { user_id } = jwtDecode(access) as { user_id: string };
