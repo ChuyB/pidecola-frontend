@@ -107,7 +107,8 @@ export async function getUserVehicles() {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access}`,
-  }
+    }
+  });
   if (res.status === 401) return null;
   const result = await res.json();
   return result;
