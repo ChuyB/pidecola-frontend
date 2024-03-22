@@ -6,7 +6,7 @@ import Link from "next/link";
 import { getUserRole } from "@/lib/actions/users";
 
 export default async function Home() {
-  const role = await getUserRole();
+  // const role = await getUserRole();
   return (
     <div className="min-h-3/4 flex flex-col justify-center items-center">
       <div className="h-full w-min flex flex-col gap-y-8 md:gap-y-12 justify-center items-center py-10">
@@ -16,7 +16,10 @@ export default async function Home() {
 
         <section className="h-full flex flex-col gap-10 md:flex-row justify-center items-center">
           <RideRequestCard />
-          {role === "driver" ? <OfferSeatsCard /> : ""}
+          <OfferSeatsCard />
+          {/*
+            role === "driver" && <OfferSeatsCard />
+            */}
         </section>
       </div>
     </div>
