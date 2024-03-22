@@ -8,6 +8,8 @@ import {
   NavbarContent,
   NavbarItem,
 } from "@nextui-org/navbar";
+import { Suspense } from "react";
+import { Skeleton } from "@nextui-org/react";
 
 const Header = () => {
   return (
@@ -30,7 +32,9 @@ const Header = () => {
 
       <NavbarContent justify="end">
         <NavbarItem>
-          <UserInfo />
+          <Suspense fallback={<Skeleton className="h-[40px] w-[125px] rounded-lg"/>}>
+            <UserInfo />
+          </Suspense>
         </NavbarItem>
       </NavbarContent>
     </Navbar>

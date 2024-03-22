@@ -3,6 +3,7 @@
 import { setAuthCookies, getAuthCookies } from "../services/authCookie";
 import { jwtDecode } from "jwt-decode";
 import { Vehicle } from "../types/vehicle.type";
+import { revalidateTag } from "next/cache";
 
 const SERVER = process.env.NEXT_PUBLIC_API_URL;
 
@@ -20,6 +21,8 @@ export async function loginUser(_currentState: unknown, formData: FormData) {
   });
   const result = await res.json();
   setAuthCookies(res, result);
+  revalidateTag("user_email");
+  revalidateTag("user_role");
   return { status: res.status, message: result.message };
 }
 
@@ -35,6 +38,8 @@ export async function logoutUser() {
     },
     body: JSON.stringify({ refresh }),
   });
+  revalidateTag("user_email");
+  revalidateTag("user_role");
 }
 
 export async function registerUser(_currentState: unknown, formData: FormData) {
@@ -54,24 +59,30 @@ export async function registerUser(_currentState: unknown, formData: FormData) {
   });
   const result = await res.json();
   setAuthCookies(res, result);
+  revalidateTag("user_email");
+  revalidateTag("user_role");
   return { status: res.status, message: result.message };
 }
 
 export async function getUserEmail() {
   const { access } = getAuthCookies();
-  if (!access) return null;
+  if (!access) return;
 
   const { user_id } = jwtDecode(access) as { user_id: string };
+
   const res = await fetch(`${SERVER}/accounts/${user_id}/`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access}`,
     },
-    cache: "force-cache",
+    cache: "no-cache",
+    next: {
+      tags: ["user_email"],
+    },
   });
 
-  if (res.status === 401) return null;
+  if (res.status === 401) return;
   const result = await res.json();
   return {
     email: result.email,
@@ -90,7 +101,10 @@ export async function getUserRole() {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access}`,
     },
-    cache: "force-cache",
+    cache: "no-cache",
+    next: {
+      tags: ["user_role"],
+    },
   });
 
   if (res.status === 401) return;
@@ -108,7 +122,10 @@ export async function getUserVehicles() {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access}`,
-      cache: "force-cache",
+    },
+    cache: "force-cache",
+    next: {
+      tags: ["user_vehicles"],
     },
   });
   if (res.status === 401) return null;
@@ -142,5 +159,6 @@ export async function registerVehicleUser(
   });
   const result = await res.json();
   setAuthCookies(res, result);
+  revalidateTag("user_vehicles");
   return { status: res.status, message: result.message };
 }
