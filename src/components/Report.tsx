@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import { Input } from "@nextui-org/input";
+import { Select, SelectItem, Button } from "@nextui-org/react";
 
 const ComentReport = () =>{
   const [coment, setComent] = useState("");
@@ -18,39 +20,50 @@ const ComentReport = () =>{
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSend(true);
+    try {
+      //await fetch("Ruta del backend que atiende la solicitud");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <div>
       <form onSubmit={handleFormSubmit}>
         <div className="mt-8">
-          <label htmlFor="report" className="mr-4 font-bold">Tipo de Denuncia: </label>
-          <select 
-          id="report" 
-          value={report} 
-          onChange={handleReport} 
-          className="rounded-md">
-              {denuncias.map((denuncia)=>(
-                <option key={denuncia} value={denuncia}>{denuncia}</option>
-              ))}
-          </select>
+          <Select
+          value={report}
+          onChange={handleReport}
+          placeholder="Escoja su tipo de denuncia"
+          size="md"
+          label= "Tipo de denuncia: "
+          labelPlacement="outside"
+          className="w-1/2 font-bold">
+            {denuncias.map((denuncia)=>(
+              <SelectItem key={denuncia} value={denuncia}>
+                {denuncia}
+              </SelectItem>
+            ))}
+          </Select>
         </div>
         <div className="mt-4">
-          <label htmlFor="coment" className="mr-4 font-bold">Comentario: </label>
-          <input
-            type="text"
-            id="coment"
-            value={coment}
-            onChange={handleComent}
-            className="rounded-md w-full"
+          <Input
+          type="textarea"
+          value={coment}
+          label = "Comentario: "
+          labelPlacement="outside"
+          placeholder="¿Por qué reportará al conductor?"
+          onChange={handleComent}
+          className="font-bold"
           />
         </div>
         <div className="flex justify-center items-center">
-          <button 
+          <Button 
           type="submit"
-          className="h-12 w-100 bg-yellow-400 hover:bg-yellow-200 text-black text-center font-bold py-3 px-4 mt-4 rounded-lg shadow-lg shadow-slate-600">
-            HACER DENUNCIA
-          </button>
+          color="warning"
+          className="h-12 w-100 text-black text-center font-bold py-3 px-4 mt-4 shadow-lg shadow-slate-600">
+            HACER DENUNCIA 
+          </Button>
         </div>
       </form>
       {isSend && 

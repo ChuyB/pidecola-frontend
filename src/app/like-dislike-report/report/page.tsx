@@ -16,7 +16,7 @@ export default function Like(){
       <div className="flex items-center justify-center mt-8">
         <Link
         className="w-full bg-blue-500 hover:bg-blue-300 text-white text-center font-bold py-2 px-4 mx-4 mt-6 rounded-xl shadow-lg shadow-slate-600"
-        href='/dashboard/likes'>
+        href='/home'>
           FINALIZAR
         </Link>
       </div>
