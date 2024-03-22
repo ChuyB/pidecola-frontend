@@ -13,7 +13,7 @@ import { Skeleton } from "@nextui-org/react";
 
 const Header = () => {
   return (
-    <Navbar shouldHideOnScroll>
+    <Navbar position="static">
       <NavbarBrand>
         <Link
           href="/"

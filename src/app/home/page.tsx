@@ -4,9 +4,10 @@ import roadway from "@/assets/intersection.webp";
 import driver from "@/assets/driver.webp";
 import Link from "next/link";
 import { getUserRole } from "@/lib/actions/users";
+import { ArrowRightIcon } from "@heroicons/react/16/solid";
 
 export default async function Home() {
-  // const role = await getUserRole();
+  const role = await getUserRole();
   return (
     <div className="min-h-3/4 flex flex-col justify-center items-center">
       <div className="h-full w-min flex flex-col gap-y-8 md:gap-y-12 justify-center items-center py-10">
@@ -14,12 +15,9 @@ export default async function Home() {
           ¿Qué deseas hacer?
         </h1>
 
-        <section className="h-full flex flex-col gap-10 md:flex-row justify-center items-center">
+        <section className="h-full flex flex-col gap-10 md:flex-row justify-center items-center animate-fade-up">
           <RideRequestCard />
-          <OfferSeatsCard />
-          {/*
-            role === "driver" && <OfferSeatsCard />
-            */}
+          {role === "driver" && <OfferSeatsCard />}
         </section>
       </div>
     </div>
@@ -29,7 +27,6 @@ export default async function Home() {
 const RideRequestCard = () => {
   return (
     <Card
-      isFooterBlurred
       radius="lg"
       className="w-[350px] h-[440px] border-none after:absolute after:bg-black/10 after:inset-0 after:m-auto"
     >
@@ -49,13 +46,14 @@ const RideRequestCard = () => {
         placeholder="blur"
         className="h-auto object-cover"
       />
-      <CardFooter className="absolute bottom-0 bg-white/30 z-10 justify-end">
+      <CardFooter className="absolute bottom-0 bg-gradient-to-t from-black/40 z-10 justify-end">
         <Button
           as={Link}
           href="/request-ride"
           className="text-sm"
           color="primary"
           size="md"
+          endContent={<ArrowRightIcon className="h-1/2" />}
         >
           Pedir cola
         </Button>
@@ -67,7 +65,6 @@ const RideRequestCard = () => {
 const OfferSeatsCard = () => {
   return (
     <Card
-      isFooterBlurred
       radius="lg"
       className="w-[350px] h-[440px] border-none after:absolute after:bg-black/35 after:inset-0 after:m-auto"
     >
@@ -87,13 +84,14 @@ const OfferSeatsCard = () => {
         placeholder="blur"
         className="w-full object-cover"
       />
-      <CardFooter className="absolute bottom-0 bg-white/30 z-10 justify-end">
+      <CardFooter className="absolute bottom-0 bg-gradient-to-t from-black/40 z-10 justify-end">
         <Button
           as={Link}
           href="/offer-seats"
           className="text-sm"
           color="primary"
           size="md"
+          endContent={<ArrowRightIcon className="h-1/2" />}
         >
           Ofrecer Cola
         </Button>
