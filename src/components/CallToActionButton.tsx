@@ -10,7 +10,7 @@ const CallToActionButton = () => {
       size="lg"
       radius="full"
       className={`bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 font-bold text-white`}
-      onClick={() => router.push("/login")}
+      onClick={() => router.push("/register")}
     >
       ¡Únete ahora!
     </Button>
