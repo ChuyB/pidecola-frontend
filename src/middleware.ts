@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { checkSession } from "./lib/services/checkSession";
-import { getUserRole } from "./lib/services/roles";
+import { getUserRole, userHasRideOrRequest } from "./lib/services/user";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -38,6 +38,12 @@ export async function middleware(request: NextRequest) {
       if (userRole !== "driver")
         return NextResponse.redirect(new URL("/request-ride", request.url));
     }
+
+    const hasActiveTravel = await userHasRideOrRequest(accessToken);
+    if (!pathname.startsWith("/request-ride") && hasActiveTravel?.request)
+      return NextResponse.redirect(new URL("/request-ride", request.url));
+    if (!pathname.startsWith("/offer-seats") && hasActiveTravel?.ride)
+      return NextResponse.redirect(new URL("/offer-seats", request.url));
 
     return response;
   }
