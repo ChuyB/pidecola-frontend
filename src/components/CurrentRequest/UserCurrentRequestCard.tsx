@@ -7,10 +7,11 @@ import {
   User,
 } from "@nextui-org/react";
 import CancelRideButton from "./CancelRideButton";
-import RideStatus from "./RideStatus";
+import RideStatus from "@/components/RideStatus";
+import { ReviewRideButton } from "./ReviewRideButton";
 
 interface UserCurrentRideProps {
-  userId: number;
+  id: number;
   to: string;
   from: string;
   driver: {
@@ -20,14 +21,16 @@ interface UserCurrentRideProps {
     phone_number: number;
   } | null;
   status: string;
+  isReviewed: boolean;
 }
 
 const UserCurrentRequestCard = ({
-  userId,
+  id,
   to,
   from,
   driver,
   status,
+  isReviewed,
 }: UserCurrentRideProps) => {
   return (
     <Card className="w-full animate-fade-up">
@@ -57,7 +60,8 @@ const UserCurrentRequestCard = ({
       </CardBody>
       <CardFooter className="flex flex-row justify-between">
         <RideStatus status={status} />
-        {status === "pendiente" && <CancelRideButton id={userId} />}
+        {status === "pendiente" && <CancelRideButton id={id} />}
+        {status === "finalizado" && !isReviewed && <ReviewRideButton id={id} />}
       </CardFooter>
     </Card>
   );

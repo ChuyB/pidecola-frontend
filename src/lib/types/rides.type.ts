@@ -35,4 +35,5 @@ export interface RideRequest {
     last_name: string;
     phone_number: number;
   };
+  is_reviewed: boolean;
 }
