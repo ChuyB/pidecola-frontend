@@ -62,27 +62,27 @@ export async function requestRide(_currentState: unknown, formData: FormData) {
 
 export async function getUserCurrentRequest() {
   const { access } = getAuthCookies();
-  if (!access) return [];
+  if (!access) return null;
 
   const { user_id } = jwtDecode(access) as { user_id: string };
 
-  const res = await fetch(
-    `${SERVER}/ride_requests/${user_id}/get_by_user_id/`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${access}`,
-      },
-      cache: "no-cache",
-      next: {
-        tags: ["current_request"],
-      },
+  const res = await fetch(`${SERVER}/ride_requests/${user_id}/active/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access}`,
     },
-  );
+    cache: "no-cache",
+    next: {
+      tags: ["current_request"],
+    },
+  });
   const result = await res.json();
+  const hasRide = Object.keys(result).length !== 0;
 
-  return result as RideRequest[];
+  if (hasRide) return result as RideRequest;
+
+  return null;
 }
 
 export async function cancelRide(id: number) {
@@ -97,6 +97,25 @@ export async function cancelRide(id: number) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access}`,
     },
+  });
+
+  revalidateTag("current_request");
+  revalidateTag("rides_list");
+}
+
+export async function reviewRide(id: number, review: "like" | "dislike") {
+  if (isAccessTokenExpired()) await refreshTokens();
+
+  const { access } = getAuthCookies();
+  if (!access) return;
+
+  await fetch(`${SERVER}/ride_requests/${id}/review/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access}`,
+    },
+    body: JSON.stringify({ review }),
   });
 
   revalidateTag("current_request");
@@ -134,20 +153,17 @@ export async function getUserCurrentRide() {
 
   const { user_id } = jwtDecode(access) as { user_id: string };
 
-  const res = await fetch(
-    `${SERVER}/rides/${user_id}/get_by_user_id/`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${access}`,
-      },
-      cache: "no-cache",
-      next: {
-        tags: ["current_ride"],
-      },
+  const res = await fetch(`${SERVER}/rides/${user_id}/get_by_user_id/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access}`,
     },
-  );
+    cache: "no-cache",
+    next: {
+      tags: ["current_ride"],
+    },
+  });
   const result = await res.json();
 
   return result as Ride[];

@@ -1,22 +1,37 @@
 import Image from "next/image";
-import RequestRideForm from "@/components/RequestRideForm";
+import RequestRideForm from "@/components/CurrentRequest/RequestRideForm";
 import carpool from "@/assets/carpool_2.svg";
 import { getUserCurrentRequest } from "@/lib/actions/rides";
-import UserCurrentRequestCard from "@/components/UserCurrentRequestCard";
+import UserCurrentRequestCard from "@/components/CurrentRequest/UserCurrentRequestCard";
 
 const ActiveRideRequestSection = async () => {
-  const ride = await getUserCurrentRequest();
+  const request = await getUserCurrentRequest();
+
+  const renderTitle = (status: string) => {
+    if (status === "finalizado")
+      return (
+        <div>
+          <h1 className="text-2xl font-bold">¡Tu cola ha finalizado!</h1>
+          <p className="text-md font-semibold text-gray-500">
+            Recuerda dar una valoración a tu conductor
+          </p>
+        </div>
+      );
+    return <h1 className="text-2xl font-bold">¡Tienes una cola solicitada!</h1>;
+  };
+
   return (
     <section className="mt-10 w-full max-w-lg px-6 text-center">
-      {ride.length !== 0 ? (
+      {request ? (
         <div className="flex flex-col gap-8 md:gap-12 text-left md:text-center">
-          <h1 className="text-2xl font-bold">¡Tienes una cola solicitada!</h1>
+          {renderTitle(request.status)}
           <UserCurrentRequestCard
-            userId={ride[0]?.id}
-            from={ride[0]?.origin}
-            to={ride[0]?.destination}
-            driver={ride[0]?.driver}
-            status={ride[0]?.status}
+            id={request.id}
+            from={request.origin}
+            to={request.destination}
+            driver={request.driver}
+            status={request.status}
+            isReviewed={request.is_reviewed}
           />
         </div>
       ) : (
