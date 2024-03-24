@@ -89,10 +89,10 @@ const DropdownNavigation = ({ userData }: DropdownNavigationProps) => {
           Iniciar Sesión
         </Button>
         <Button
-          className="hidden md:visible"
-          size="sm"
+          className="hidden md:flex"
           color="primary"
           variant="solid"
+          as={Link}
           href="/register"
         >
           Regístrate
