@@ -1,6 +1,6 @@
 "use client";
 
-import { HomeIcon } from "@heroicons/react/16/solid";
+import { HomeIcon } from "@heroicons/react/24/outline";
 import { Button } from "@nextui-org/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -12,14 +12,15 @@ const HomeButton = () => {
     pathname !== "/home" && (
       <Button
         isIconOnly
-        color="primary"
-        variant="ghost"
+        color="default"
+        variant="light"
         radius="full"
         aria-label="Página principal"
         as={Link}
         href="/"
+        size="sm"
       >
-        <HomeIcon className="h-1/2" />
+        <HomeIcon className="h-full text-gray-400" />
       </Button>
     )
   );
