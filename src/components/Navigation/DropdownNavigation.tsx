@@ -32,7 +32,9 @@ const DropdownNavigation = ({ userData }: DropdownNavigationProps) => {
         <Avatar
           isBordered
           color="warning"
-          as="button"
+          as={Button}
+          isIconOnly
+          radius="full"
           size="sm"
           name={userData ? userData.name : ""}
           fallback={<UserIcon className="w-full h-full" />}

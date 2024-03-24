@@ -40,10 +40,12 @@ export async function middleware(request: NextRequest) {
     }
 
     const hasActiveTravel = await userHasRideOrRequest(accessToken);
-    if (!pathname.startsWith("/request-ride") && hasActiveTravel?.request)
-      return NextResponse.redirect(new URL("/request-ride", request.url));
-    if (!pathname.startsWith("/offer-seats") && hasActiveTravel?.ride)
-      return NextResponse.redirect(new URL("/offer-seats", request.url));
+    if (!pathname.startsWith("/profile") && !pathname.startsWith("/vehicles")) {
+      if (!pathname.startsWith("/request-ride") && hasActiveTravel?.request)
+        return NextResponse.redirect(new URL("/request-ride", request.url));
+      if (!pathname.startsWith("/offer-seats") && hasActiveTravel?.ride)
+        return NextResponse.redirect(new URL("/offer-seats", request.url));
+    }
 
     return response;
   }
