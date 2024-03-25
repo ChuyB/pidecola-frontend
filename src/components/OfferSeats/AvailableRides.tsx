@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { RideRequest } from "@/lib/types/rides.type";
-import RideCard from "../RideCard";
+import RideCard from "@/components/OfferSeats/RideCard";
 import { getAllRides } from "@/lib/actions/rides";
 import { useOfferSeatsContext } from "./OfferSeatsProvider";
 
