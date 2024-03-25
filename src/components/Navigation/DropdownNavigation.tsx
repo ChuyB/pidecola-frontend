@@ -37,7 +37,6 @@ const DropdownNavigation = ({ userData }: DropdownNavigationProps) => {
           radius="full"
           size="sm"
           name={userData ? userData.name : ""}
-          fallback={<UserIcon className="w-full h-full" />}
         />
       </DropdownTrigger>
 
@@ -50,18 +49,9 @@ const DropdownNavigation = ({ userData }: DropdownNavigationProps) => {
         </DropdownSection>
         <DropdownSection>
           <DropdownItem
-            key="vehiculos"
-            as={Link}
-            startContent={<TruckIcon className={iconClasses} />}
-            href="/vehicles"
-          >
-            Vehículos
-          </DropdownItem>
-
-          <DropdownItem
             key="perfil"
             as={Link}
-            startContent={<Cog6ToothIcon className={iconClasses} />}
+            startContent={<UserIcon className={iconClasses} />}
             href="/profile"
           >
             Mi Perfil

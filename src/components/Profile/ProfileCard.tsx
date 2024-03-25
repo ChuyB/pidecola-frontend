@@ -12,7 +12,6 @@ import {
   Chip,
 } from "@nextui-org/react";
 import ProfileDetailsEditForm from "@/components/Profile/ProfileDetailsEditForm";
-import { getUserInfo } from "@/lib/actions/users";
 
 type UserProfileData =
   | User
@@ -23,10 +22,9 @@ type UserProfileData =
       dislikes: number;
     };
 
-const ProfileCard = async ({ id }: { id: string }) => {
-  const user = (await getUserInfo(id)) as UserProfileData;
+const ProfileCard = async ({ user }: { user: UserProfileData }) => {
   return (
-    <Card className="grow max-w-sm">
+    <Card className="grow w-full max-w-sm">
       <CardHeader className="relative flex flex-col gap-4 items-center py-10">
         {"id" in user && <ProfileDetailsEditForm userData={user} />}
         <Avatar

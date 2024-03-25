@@ -81,13 +81,22 @@ export async function patchUserInfo(
       Authorization: `Bearer ${access}`,
     },
     body: JSON.stringify(formData),
-  })
+  });
 
-  revalidateTag("user_info")
-  return {status: res.status }
+  revalidateTag("user_info");
+  return { status: res.status };
 }
 
-export async function getUserInfo(id: string) {
+export async function getUserInfo(id: string): Promise<
+  | User
+  | {
+      first_name: string;
+      last_name: string;
+      likes: number;
+      dislikes: number;
+    }
+  | undefined
+> {
   const { access } = getAuthCookies();
   if (!access) return;
 
