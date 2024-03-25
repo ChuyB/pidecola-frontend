@@ -6,7 +6,7 @@ import {
   Divider,
   User,
 } from "@nextui-org/react";
-import RideStatus from "./RideStatus";
+import RideStatus from "@/components/RideStatus";
 import { Ride } from "@/lib/types/rides.type";
 import BeginRideButton from "./BeginRideButton";
 import FinishRideButton from "./FinishRideButton";
