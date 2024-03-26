@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { checkSession } from "./lib/services/checkSession";
+import { applySetCookie, checkSession } from "./lib/services/checkSession";
 import { getUserRole, userHasRideOrRequest } from "./lib/services/user";
 
 export async function middleware(request: NextRequest) {
@@ -46,6 +46,10 @@ export async function middleware(request: NextRequest) {
       if (!pathname.startsWith("/offer-seats") && hasActiveTravel?.ride)
         return NextResponse.redirect(new URL("/offer-seats", request.url));
     }
+
+    // Fix to Server Actions getting outdated cookies
+    if (response) 
+      applySetCookie(request, response);
 
     return response;
   }

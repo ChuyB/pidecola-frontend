@@ -76,7 +76,7 @@ export async function getUserEmail() {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access}`,
     },
-    cache: "no-cache",
+    cache: "force-cache",
     next: {
       tags: ["user_email"],
     },
@@ -101,7 +101,7 @@ export async function getUserRole() {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access}`,
     },
-    cache: "no-cache",
+    cache: "force-cache",
     next: {
       tags: ["user_role"],
     },
@@ -158,7 +158,6 @@ export async function registerVehicleUser(
     },
   });
   const result = await res.json();
-  setAuthCookies(res, result);
   revalidateTag("user_vehicles");
   return { status: res.status, message: result.message };
 }
