@@ -8,7 +8,7 @@ const ProfileInfoSection = async ({ id }: { id: string }) => {
   return (
     <section className="flex flex-col md:flex-row justify-center items-center md:items-stretch gap-8 mt-10 p-4">
       <ProfileCard user={userInfo} />
-      {"id" in userInfo && <VehiclesCard />}
+      {"role" in userInfo && userInfo.role === "driver" && <VehiclesCard />}
     </section>
   );
 };
