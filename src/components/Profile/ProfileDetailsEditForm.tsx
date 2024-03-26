@@ -120,6 +120,10 @@ export default function ProfileDetailsEditForm({
                   value={phoneNumber}
                   onChange={handlePhoneNumberChange}
                   variant="faded"
+                  isInvalid={formErrors?.phone_number}
+                  errorMessage={
+                    formErrors?.phone_number ? formErrors.phone_number[0] : ""
+                  }
                 />
                 <SaveChangesButton />
               </form>
