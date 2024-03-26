@@ -1,9 +1,10 @@
 "use server";
 
+import { revalidateTag } from "next/cache";
 import { setAuthCookies, getAuthCookies } from "../services/authCookie";
 import { jwtDecode } from "jwt-decode";
 import { Vehicle } from "../types/vehicle.type";
-import { revalidateTag } from "next/cache";
+import { User } from "../types/user.type";
 
 const SERVER = process.env.NEXT_PUBLIC_API_URL;
 
@@ -62,6 +63,67 @@ export async function registerUser(_currentState: unknown, formData: FormData) {
   revalidateTag("user_email");
   revalidateTag("user_role");
   return { status: res.status, message: result.message };
+}
+
+export async function patchUserInfo(
+  _currentState: unknown,
+  formData: { [key: string]: string },
+): Promise<{ status: number } | undefined> {
+  const { access } = getAuthCookies();
+  if (!access) return;
+
+  const { user_id } = jwtDecode(access) as { user_id: number };
+
+  const res = await fetch(`${SERVER}/accounts/${user_id}/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access}`,
+    },
+    body: JSON.stringify(formData),
+  });
+
+  revalidateTag("user_info");
+  return { status: res.status };
+}
+
+export async function getUserInfo(id: string): Promise<
+  | User
+  | {
+      first_name: string;
+      last_name: string;
+      likes: number;
+      dislikes: number;
+    }
+  | undefined
+> {
+  const { access } = getAuthCookies();
+  if (!access) return;
+
+  const { user_id } = jwtDecode(access) as { user_id: number };
+
+  const res = await fetch(`${SERVER}/accounts/${user_id}/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access}`,
+    },
+    next: {
+      tags: ["user_info"],
+    },
+  });
+
+  if (res.status === 401) return;
+  const result = await res.json();
+
+  if (parseInt(id) !== user_id)
+    return {
+      first_name: result.first_name,
+      last_name: result.last_name,
+      likes: result.likes,
+      dislikes: result.dislikes,
+    };
+  return result as User;
 }
 
 export async function getUserEmail() {

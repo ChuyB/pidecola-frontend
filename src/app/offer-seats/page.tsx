@@ -1,4 +1,4 @@
-import UserCurrentRideCard from "@/components/UserCurrentRideCard";
+import UserCurrentRideCard from "@/components/CurrentRide/UserCurrentRideCard";
 import { getUserCurrentRide } from "@/lib/actions/rides";
 import OfferSeatsSection from "@/sections/OfferSeatsSection";
 
