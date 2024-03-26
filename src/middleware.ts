@@ -39,8 +39,8 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL("/request-ride", request.url));
     }
 
-    const hasActiveTravel = await userHasRideOrRequest(accessToken);
     if (!pathname.startsWith("/profile") && !pathname.startsWith("/vehicles")) {
+      const hasActiveTravel = await userHasRideOrRequest(accessToken);
       if (!pathname.startsWith("/request-ride") && hasActiveTravel?.request)
         return NextResponse.redirect(new URL("/request-ride", request.url));
       if (!pathname.startsWith("/offer-seats") && hasActiveTravel?.ride)
@@ -48,8 +48,7 @@ export async function middleware(request: NextRequest) {
     }
 
     // Fix to Server Actions getting outdated cookies
-    if (response) 
-      applySetCookie(request, response);
+    if (response) applySetCookie(request, response);
 
     return response;
   }
