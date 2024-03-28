@@ -28,15 +28,16 @@ const RegisterForm = () => {
     const data = Object.fromEntries(formData.entries());
     const validationResponse = registerSchema.safeParse(data);
     if (!validationResponse.success) {
-      const { fieldErrors } = validationResponse.error.formErrors;
       const {
-        first_name,
-        last_name,
-        email,
-        phoneNumber,
-        password,
-        confirmPass,
-      } = fieldErrors;
+        fieldErrors: {
+          first_name,
+          last_name,
+          email,
+          phoneNumber,
+          password,
+          confirmPass,
+        },
+      } = validationResponse.error.formErrors;
       setFirstNameErrInfo(first_name?.[0] || "");
       setLastNameErrInfo(last_name?.[0] || "");
       setEmailErrInfo(email?.[0] || "");
@@ -56,8 +57,7 @@ const RegisterForm = () => {
   };
 
   useEffect(() => {
-    if (resMessage?.status === 400)
-      setEmailErrInfo(resMessage?.message[0]);
+    if (resMessage?.status === 400) setEmailErrInfo(resMessage?.message[0]);
   }, [resMessage]);
 
   // Redirect if login was successful
@@ -65,8 +65,8 @@ const RegisterForm = () => {
 
   const handlePhoneNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
     const inputNumber = e.target.value;
-    const limitedNumber = inputNumber.slice(0,12)
-    const cleanedNumber = limitedNumber.replace(/-/g, "").replace(/\D/g,"");
+    const limitedNumber = inputNumber.slice(0, 12);
+    const cleanedNumber = limitedNumber.replace(/-/g, "").replace(/\D/g, "");
     const areaCode = cleanedNumber.slice(0, 4);
     const mainNumber = cleanedNumber.slice(4);
     if (mainNumber) {

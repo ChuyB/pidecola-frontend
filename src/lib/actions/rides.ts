@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { getAuthCookies } from "../services/authCookie";
 import { isAccessTokenExpired, refreshTokens } from "./session";
 import { revalidateTag } from "next/cache";
-import { Ride } from "../types/rides.type";
+import { Ride, RideRequest } from "../types/rides.type";
 
 const SERVER = process.env.NEXT_PUBLIC_API_URL;
 
@@ -55,34 +55,34 @@ export async function requestRide(_currentState: unknown, formData: FormData) {
     body: JSON.stringify(req),
   });
 
-  revalidateTag("current_ride");
+  revalidateTag("current_request");
 
   return { status: res.status };
 }
 
-export async function getUserRide() {
+export async function getUserCurrentRequest() {
   const { access } = getAuthCookies();
-  if (!access) return [];
+  if (!access) return null;
 
   const { user_id } = jwtDecode(access) as { user_id: string };
 
-  const res = await fetch(
-    `${SERVER}/ride_requests/${user_id}/get_by_user_id/`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${access}`,
-      },
-      cache: "no-cache",
-      next: {
-        tags: ["current_ride"],
-      },
+  const res = await fetch(`${SERVER}/ride_requests/${user_id}/active/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access}`,
     },
-  );
+    cache: "no-cache",
+    next: {
+      tags: ["current_request"],
+    },
+  });
   const result = await res.json();
+  const hasRide = Object.keys(result).length !== 0;
 
-  return result as Ride[];
+  if (hasRide) return result as RideRequest;
+
+  return null;
 }
 
 export async function cancelRide(id: number) {
@@ -99,15 +99,77 @@ export async function cancelRide(id: number) {
     },
   });
 
-  revalidateTag("current_ride");
+  revalidateTag("current_request");
   revalidateTag("rides_list");
 }
 
-export async function getAllRides() {
+export async function reviewRide(id: number, review: "like" | "dislike") {
+  if (isAccessTokenExpired()) await refreshTokens();
+
+  const { access } = getAuthCookies();
+  if (!access) return;
+
+  await fetch(`${SERVER}/ride_requests/${id}/review/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access}`,
+    },
+    body: JSON.stringify({ review }),
+  });
+
+  revalidateTag("current_request");
+  revalidateTag("rides_list");
+}
+
+export async function reportUser(report:string, message:string){
+  if (isAccessTokenExpired()) await refreshTokens();
+
+  const { access } = getAuthCookies();
+
+  if (!access) return;
+  await fetch(`${SERVER}/ride_request/sendReport`, {
+    method: "POST",
+    headers:{
+      "Content-Type": "aplication/json",
+      Authorization: `Bearer ${access}`,
+    },
+    body: JSON.stringify({report, message})
+  });
+}
+
+export async function getAllRides(origin: string, destination: string) {
   const { access } = getAuthCookies();
   if (!access) return [];
 
-  const res = await fetch(`${SERVER}/ride_requests/`, {
+  const res = await fetch(
+    `${SERVER}/ride_requests/?origin=${origin}&destination=${destination}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${access}`,
+      },
+      cache: "no-cache",
+      next: {
+        tags: ["rides_list"],
+      },
+    },
+  );
+
+  const result = await res.json();
+
+  if (res.status === 200) return result as RideRequest[];
+  return null;
+}
+
+export async function getUserCurrentRide() {
+  const { access } = getAuthCookies();
+  if (!access) return [];
+
+  const { user_id } = jwtDecode(access) as { user_id: string };
+
+  const res = await fetch(`${SERVER}/rides/${user_id}/get_by_user_id/`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -115,12 +177,80 @@ export async function getAllRides() {
     },
     cache: "no-cache",
     next: {
-      tags: ["rides_list"],
+      tags: ["current_ride"],
+    },
+  });
+  const result = await res.json();
+
+  return result as Ride[];
+}
+
+export async function createNewRide(
+  _currentState: unknown,
+  formData: FormData,
+) {
+  const rawReq = Object.fromEntries(formData);
+  if (isAccessTokenExpired()) refreshTokens();
+
+  const { access } = getAuthCookies();
+  if (!access) return;
+
+  const { user_id } = jwtDecode(access) as { user_id: string };
+  const routes = (rawReq.requests as string)
+    .split(",")
+    .map((id) => parseInt(id));
+
+  const req = {
+    user: user_id,
+    origin: rawReq.origin as string,
+    destination: rawReq.destination as string,
+    requests: routes,
+  };
+
+  const res = await fetch(`${SERVER}/rides/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access}`,
+    },
+    body: JSON.stringify(req),
+  });
+
+  revalidateTag("current_ride");
+
+  return { status: res.status };
+}
+
+export async function beginRide(id: number) {
+  if (isAccessTokenExpired()) await refreshTokens();
+
+  const { access } = getAuthCookies();
+  if (!access) return;
+
+  await fetch(`${SERVER}/rides/${id}/initiate/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access}`,
     },
   });
 
-  const result = await res.json();
+  revalidateTag("current_ride");
+}
 
-  if (res.status === 200) return result as Ride[];
-  return null;
+export async function finishRide(id: number) {
+  if (isAccessTokenExpired()) await refreshTokens();
+
+  const { access } = getAuthCookies();
+  if (!access) return;
+
+  await fetch(`${SERVER}/rides/${id}/finish/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access}`,
+    },
+  });
+
+  revalidateTag("current_ride");
 }

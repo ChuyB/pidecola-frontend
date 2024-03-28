@@ -1,10 +1,8 @@
 import Link from "next/link";
-import Header from "@/components/Header";
 
 export default function NotFound() {
   return (
     <div className="flex flex-col h-screen bg-neutral-50 dark:bg-gray-800">
-      <Header />
       <div className="h-full place-self-center flex flex-col items-center justify-center">
         <Link href={"/"}>
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight font-black text-blue-950 animate-fade-right drop-shadow-md">

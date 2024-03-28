@@ -1,9 +1,8 @@
 "use client";
 
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/react";
-import Link from "next/link";
 import { registerVehicleUser } from "@/lib/actions/users";
 import { useFormState, useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
@@ -52,8 +51,8 @@ const RegisterVehicleForm = () => {
       setSeats(resMessage?.message[0]);
   }, [resMessage]);
 
-  // Redirect if register was successful
-  if (resMessage?.status === 201) router.push("/vehicles");
+  // Redirect if vehicle register was successful
+  if (resMessage?.status === 201) router.push("/profile");
 
   return (
     <div className="z-10 bg-slate-200/80 backdrop-blur-lg dark:bg-slate-800 md:shadow-lg dark:shadow-gray-900 rounded-xl p-6 w-full max-w-sm sm:max-w-md md:max-w-lg">

@@ -1,8 +1,10 @@
 "use server";
 
+import { revalidateTag } from "next/cache";
 import { setAuthCookies, getAuthCookies } from "../services/authCookie";
 import { jwtDecode } from "jwt-decode";
-import { isAccessTokenExpired, refreshTokens } from "./session";
+import { Vehicle } from "../types/vehicle.type";
+import { User } from "../types/user.type";
 
 const SERVER = process.env.NEXT_PUBLIC_API_URL;
 
@@ -20,6 +22,8 @@ export async function loginUser(_currentState: unknown, formData: FormData) {
   });
   const result = await res.json();
   setAuthCookies(res, result);
+  revalidateTag("user_email");
+  revalidateTag("user_role");
   return { status: res.status, message: result.message };
 }
 
@@ -35,6 +39,8 @@ export async function logoutUser() {
     },
     body: JSON.stringify({ refresh }),
   });
+  revalidateTag("user_email");
+  revalidateTag("user_role");
 }
 
 export async function registerUser(_currentState: unknown, formData: FormData) {
@@ -54,29 +60,96 @@ export async function registerUser(_currentState: unknown, formData: FormData) {
   });
   const result = await res.json();
   setAuthCookies(res, result);
+  revalidateTag("user_email");
+  revalidateTag("user_role");
   return { status: res.status, message: result.message };
 }
 
-export async function getUserEmail() {
-  const cookies = getAuthCookies();
-  if (!cookies) return;
+export async function patchUserInfo(
+  _currentState: unknown,
+  formData: { [key: string]: string },
+): Promise<{ status: number } | undefined> {
+  const { access } = getAuthCookies();
+  if (!access) return;
 
-  if (isAccessTokenExpired()) await refreshTokens();
-  const { refresh, access } = getAuthCookies();
-  if (!refresh || !access) return;
+  const { user_id } = jwtDecode(access) as { user_id: number };
 
-  const { user_id } = jwtDecode(access) as { user_id: string };
+  const res = await fetch(`${SERVER}/accounts/${user_id}/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access}`,
+    },
+    body: JSON.stringify(formData),
+  });
+
+  revalidateTag("user_info");
+  return { status: res.status };
+}
+
+export async function getUserInfo(id: string): Promise<
+  | User
+  | {
+      first_name: string;
+      last_name: string;
+      likes: number;
+      dislikes: number;
+    }
+  | undefined
+> {
+  const { access } = getAuthCookies();
+  if (!access) return;
+
+  const { user_id } = jwtDecode(access) as { user_id: number };
+
   const res = await fetch(`${SERVER}/accounts/${user_id}/`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access}`,
     },
+    next: {
+      tags: ["user_info"],
+    },
   });
 
   if (res.status === 401) return;
   const result = await res.json();
-  return { email: result.email, name: `${result.first_name} ${result.last_name}` };
+
+  if (parseInt(id) !== user_id)
+    return {
+      first_name: result.first_name,
+      last_name: result.last_name,
+      likes: result.likes,
+      dislikes: result.dislikes,
+    };
+  return result as User;
+}
+
+export async function getUserEmail() {
+  const { access } = getAuthCookies();
+  if (!access) return;
+
+  const { user_id } = jwtDecode(access) as { user_id: string };
+
+  const res = await fetch(`${SERVER}/accounts/${user_id}/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access}`,
+    },
+    cache: "force-cache",
+    next: {
+      tags: ["user_email"],
+    },
+  });
+
+  if (res.status === 401) return;
+  const result = await res.json();
+  return {
+    email: result.email,
+    name: `${result.first_name} ${result.last_name}`,
+  };
 }
 
 export async function getUserRole() {
@@ -90,15 +163,19 @@ export async function getUserRole() {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access}`,
     },
+    cache: "force-cache",
+    next: {
+      tags: ["user_role"],
+    },
   });
-  
+
   if (res.status === 401) return;
   const result = await res.json();
   return result.role as string;
 }
 
 export async function getUserVehicles() {
-  const {access} = getAuthCookies();
+  const { access } = getAuthCookies();
   if (!access) return null;
 
   const { user_id } = jwtDecode(access) as { user_id: string };
@@ -107,14 +184,22 @@ export async function getUserVehicles() {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access}`,
-  }
+    },
+    cache: "force-cache",
+    next: {
+      tags: ["user_vehicles"],
+    },
+  });
   if (res.status === 401) return null;
   const result = await res.json();
-  return result;
+  return result as Vehicle[];
 }
 
-export async function registerVehicleUser(_currentState: unknown, formData: FormData) {
-  const {access} = getAuthCookies();
+export async function registerVehicleUser(
+  _currentState: unknown,
+  formData: FormData,
+) {
+  const { access } = getAuthCookies();
   if (!access) return null;
 
   const { user_id } = jwtDecode(access) as { user_id: string };
@@ -135,6 +220,6 @@ export async function registerVehicleUser(_currentState: unknown, formData: Form
     },
   });
   const result = await res.json();
-  setAuthCookies(res, result);
+  revalidateTag("user_vehicles");
   return { status: res.status, message: result.message };
 }
