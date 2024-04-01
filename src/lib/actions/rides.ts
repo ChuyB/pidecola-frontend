@@ -122,6 +122,22 @@ export async function reviewRide(id: number, review: "like" | "dislike") {
   revalidateTag("rides_list");
 }
 
+export async function reportUser(report:string, message:string){
+  if (isAccessTokenExpired()) await refreshTokens();
+
+  const { access } = getAuthCookies();
+
+  if (!access) return;
+  await fetch(`${SERVER}/ride_request/sendReport`, {
+    method: "POST",
+    headers:{
+      "Content-Type": "aplication/json",
+      Authorization: `Bearer ${access}`,
+    },
+    body: JSON.stringify({report, message})
+  });
+}
+
 export async function getAllRides(origin: string, destination: string) {
   const { access } = getAuthCookies();
   if (!access) return [];
