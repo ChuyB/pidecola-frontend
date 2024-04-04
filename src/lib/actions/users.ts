@@ -87,16 +87,9 @@ export async function patchUserInfo(
   return { status: res.status };
 }
 
-export async function getUserInfo(id: string): Promise<
-  | User
-  | {
-      first_name: string;
-      last_name: string;
-      likes: number;
-      dislikes: number;
-    }
-  | undefined
-> {
+export async function getUserInfo(
+  id: string
+): Promise<User|undefined> {
   const { access } = getAuthCookies();
   if (!access) return;
 
@@ -115,14 +108,7 @@ export async function getUserInfo(id: string): Promise<
 
   if (res.status === 401) return;
   const result = await res.json();
-
-  if (parseInt(id) !== user_id)
-    return {
-      first_name: result.first_name,
-      last_name: result.last_name,
-      likes: result.likes,
-      dislikes: result.dislikes,
-    };
+  
   return result as User;
 }
 

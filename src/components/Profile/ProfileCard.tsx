@@ -10,19 +10,12 @@ import {
   CardFooter,
   CardHeader,
   Chip,
+  Divider
 } from "@nextui-org/react";
 import ProfileDetailsEditForm from "@/components/Profile/ProfileDetailsEditForm";
+import HonorificTitleList from "../Profile/HonorificTitles"
 
-type UserProfileData =
-  | User
-  | {
-      first_name: string;
-      last_name: string;
-      likes: number;
-      dislikes: number;
-    };
-
-const ProfileCard = async ({ user }: { user: UserProfileData }) => {
+const ProfileCard = async ({ user }: { user: User }) => {  
   return (
     <Card className="grow w-full max-w-sm">
       <CardHeader className="relative flex flex-col gap-4 items-center py-10">
@@ -46,6 +39,8 @@ const ProfileCard = async ({ user }: { user: UserProfileData }) => {
             <span>{user.phone_number}</span>
           </Tag>
         )}
+      <Divider/>
+      <HonorificTitleList titles={user.honorific_titles}/>
       </CardBody>
       <CardFooter className="flex justify-center gap-2">
         <Tag text="Reviews" />

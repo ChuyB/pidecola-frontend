@@ -22,4 +22,11 @@ export interface User {
   likes: number;
   dislikes: number;
   phone_number: string;
+  honorific_titles: HonorificTitle[];
+}
+
+export interface HonorificTitle {
+  id: string;
+  name: string;
+  description: string;
 }
