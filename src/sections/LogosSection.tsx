@@ -13,7 +13,7 @@ const LogosSection = () => {
       <h2 className="text-xl text-center text-blue-950 dark:text-yellow-50 font-bold">
         Un proyecto de:
       </h2>
-y mx 
+
       <main
         ref={ref}
         className={` ${inView ? "animate-fade-up" : "opacity-0"}
