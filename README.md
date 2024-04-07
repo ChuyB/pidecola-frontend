@@ -3,8 +3,7 @@
 This repository contains the code for the web client of the PideCola project. It is written with `NextJS` and `TypeScript`.
 
 ## Deploy
-
-Executing `docker compose up` at the root directory of the project should instantiate a docker container with a production build of the web app.
+Executing `docker compose build` and `docker compose up` at the root directory of the project should instantiate a docker container with a production build of the web app.
 
 ## Development environment setup
 
