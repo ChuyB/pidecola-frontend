@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    environment:
+      NEXT_PUBLIC_API_URL: "http://host.docker.internal:8000/api/v1"    
+    ports:
+      - 3000:3000

@@ -4,7 +4,7 @@ services:
   web:
     build: .
     environment:
-      NEXT_PUBLIC_API_URL: "http://host.docker.internal:8000"
+      NEXT_PUBLIC_API_URL: "http://host.docker.internal:8000/api/v1"
       API_SECRET: "django-insecure-to81=t+gc4eqjqpeh$(+y!h(0s9s28nc_y*)a2*4(lsav9wbx-"
       REACT_EDITOR: code
 
